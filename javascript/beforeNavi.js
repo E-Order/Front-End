@@ -10,7 +10,7 @@ Vue.component('beforeNavi',{
 		      active-text-color="#ffd04b"
 		      router
 		      >
-		      <el-menu-item index="1" disabled="true">
+		      <el-menu-item index="1" disabled>
 		        <i class="el-icon-menu"></i>
 		        <span slot="title" class="showNav">导航</span>
 		      </el-menu-item>

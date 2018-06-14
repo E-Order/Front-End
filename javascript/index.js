@@ -5,6 +5,7 @@ const afterNavi = { template: '<afterNavi></afterNavi>' }
 const beforeNavi = { template: '<beforeNavi></beforeNavi>' }
 const order = { template: '<orderList></orderList>' }
 const product = { template: '<productList></productList>' }
+const settings = { template: '<settings></settings>' }
 
 const router = new VueRouter({
   routes: [
@@ -48,6 +49,20 @@ const router = new VueRouter({
       components: {
         naviBar: afterNavi,
         mainContent: product
+      }
+    },
+    {
+      path: '/manageIndex',
+      components: {
+        naviBar: afterNavi,
+        mainContent: settings
+      }
+    },
+    {
+      path: '/manageSetting',
+      components: {
+        naviBar: afterNavi,
+        mainContent: settings
       }
     }
   ]

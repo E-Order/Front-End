@@ -10,19 +10,19 @@ Vue.component('afterNavi',{
 		      active-text-color="#ffd04b"
 		      router
 		      >
-		      <el-menu-item index="1" disabled="true">
+		      <el-menu-item route="/manageSetting" index="1">
 		        <i class="el-icon-menu"></i>
-		        <span slot="title" class="showNav">导航</span>
+		        <span slot="title" class="showNav">设置</span>
 		      </el-menu-item>
-		      <el-menu-item  route="/signin" index="2">
+		      <el-menu-item  route="/manageProduct" index="2">
 		        <i class="el-icon-edit"></i>
 		        <span slot="title" class="showNav">菜品管理</span>
 		      </el-menu-item>
-		      <el-menu-item route="/signup" index="3">
+		      <el-menu-item route="/manageOrder" index="3">
 		        <i class="el-icon-edit-outline"></i>
 		        <span slot="title" class="showNav">订单管理</span>
 		      </el-menu-item>
-		      <el-menu-item  route="/contact" index="4">
+		      <el-menu-item  route="/signin" index="4">
 		        <i class="el-icon-message"></i>
 		        <span slot="title" class="showNav">退出登陆</span>
 		      </el-menu-item>
