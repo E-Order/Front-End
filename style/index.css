@@ -117,3 +117,6 @@ a {
 	margin-left: 10%;
 }
 
+#addCategories, #updateCategories {
+	width: 20%;
+}

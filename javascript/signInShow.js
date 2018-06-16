@@ -51,11 +51,14 @@ Vue.component('signinshow', {
 					};
 					$.ajax({
 		                type: "POST",
-		                url: "https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+		                // url: "http://www.e-order.cn:8080/eorder/seller/signin",
+		                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
 		                contentType: "application/json",
 		                data: JSON.stringify(reqbody),
 		                dataType : 'json', 
 		                success: function(result) {
+		                	store.commit('UpdateUserId', result.sellerId)
+		                	console.log(store.state.userId)
 		                    router.push({ path: '/manageIndex' })
 		                },
 		                error: function(message) {

@@ -67,9 +67,22 @@ const router = new VueRouter({
     }
   ]
 })
-
+const store = new Vuex.Store({
+    state: {
+        userId:""
+    },
+    mutations: {
+      UpdateUserId (state, str) {
+        state.userId = str
+      },
+      ClearLogin (state) {
+        state.userId = ""
+      }
+    }
+})
 new Vue({
   el: '#app',
-  router
+  router,
+  store
 })
 
