@@ -58,7 +58,6 @@ Vue.component('signinshow', {
 		                dataType : 'json', 
 		                success: function(result) {
 		                	store.commit('UpdateUserId', result.sellerId)
-		                	console.log(store.state.userId)
 		                    router.push({ path: '/manageIndex' })
 		                },
 		                error: function(message) {

@@ -6,6 +6,8 @@ const beforeNavi = { template: '<beforeNavi></beforeNavi>' }
 const order = { template: '<orderList></orderList>' }
 const product = { template: '<productList></productList>' }
 const settings = { template: '<settings></settings>' }
+const editProduct = { template: '<editProducts></editProducts>' }
+
 
 const router = new VueRouter({
   routes: [
@@ -63,6 +65,14 @@ const router = new VueRouter({
       components: {
         naviBar: afterNavi,
         mainContent: settings
+      }
+    },
+    {
+      path: '/manageProduct/category/:type/:name',
+      name: 'editProducts',
+      components: {
+        naviBar: afterNavi,
+        mainContent: editProduct
       }
     }
   ]

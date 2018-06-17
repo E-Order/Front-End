@@ -6,6 +6,7 @@ Vue.component('productList',{
 			seenDelete:false,
 			showText:"编辑",
 			categoryId:null,
+			categoryType:null,
 			inputs: '',
 			seenAdd:false,
 			isEditting:null,
@@ -37,9 +38,11 @@ Vue.component('productList',{
                     that.types = new Array()
                     that.categoryId = new Array()
                     that.isEditting = new Array()
+                    that.categoryType = new Array()
                     for (var i = 0; i < result.data.length; i++) {
                     	that.types[i] = result.data[i].categoryName
                     	that.categoryId[i] = result.data[i].categoryId
+                    	that.categoryType[i] = result.data[i].categoryType
                     	that.isEditting[i] = false
                     }
                     that.seenAdd = true
@@ -63,7 +66,7 @@ Vue.component('productList',{
 	    },
 	    DeleteCategory(index) {
 	    	var reqbody = {
-			    // 'username':store.state.userId
+			    // 'username':store.state.userId,
 			    'userId':"123456",
 			    'categoryId':this.categoryId[index]
 			};
@@ -85,14 +88,21 @@ Vue.component('productList',{
             });
 	    },
 	    AddCategory() {
+	    	var ctype = 0;
+	    	if (this.categoryId.length > 0) {
+	    		ctype = this.categoryId[this.categoryId.length-1]+1
+	    	} else {
+	    		ctype = 0;
+	    	}
 	    	var reqbody = {
-			    // 'username':store.state.userId
+			    // 'username':store.state.userId,
 			    'username':"123456",
 			    'categoryName':this.inputs,
-			    'categoryType':this.categoryId.length
+			    'categoryType': ctype
 			};
 			var that=this;
 			that.types[that.types.length] = that.inputs
+			that.categoryType[that.categoryType.length] = ctype
             that.inputs = ''
 			$.ajax({
                 type: "POST",
@@ -110,17 +120,43 @@ Vue.component('productList',{
             });
 	    },
 	    GetDetail(index) {
-
+	    	router.push({ name: 'editProducts', params: {type : this.categoryType[index], name :  this.types[index] }})
 	    },
 	    updateCategory(index) {
-		    this.isEditting[index] = true
-		    var that = this
-	    	Vue.nextTick(function () {
-				console.log(that.isEditting[index])
-			})
+	    	for (var i = 0; i < this.isEditting.length; i++) {
+	    		if (this.isEditting[i] === true)
+	    			return
+	    	}
+		    Vue.set(this.isEditting,index,true)
 	    },
 	    commitUpdateCategory(index) {
-
+	    	var reqbody = {
+	    		
+    			// 'username':store.state.userId,
+			    "userId": "123456",
+			    "categoryId": this.categoryId[index],
+			    "categoryName": this.updates,
+			    "categoryType": index
+				
+	    	}
+	    	var that=this;
+			Vue.set(that.types,index,that.updates)
+			Vue.set(that.isEditting,index,false)
+            that.updates = ''
+            $.ajax({
+                type: "POST",
+                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
+                url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
+                contentType: "application/json",
+                data: JSON.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+                    console.log("修改类目成功")
+                },
+                error: function(message) {
+                    console.log("error")
+                }
+            });
 	    }
 
     },
@@ -138,7 +174,7 @@ Vue.component('productList',{
 			    <span v-if="!isEditting[index]">{{value}}</span>
 			    <input id="updateCategories" v-model="updates" placeholder="修改类目" v-if="isEditting[index]">
 			    <i class="el-icon-edit" v-if="seenView&&!isEditting[index]" @click="updateCategory(index)"></i>
-			    <el-button type="primary" round v-if="!isEditting[index]" @click="commitUpdateCategory(index)">提交</el-button>
+			    <el-button type="primary" round v-if="isEditting[index]" @click="commitUpdateCategory(index)">提交</el-button>
 			</div>
 			<el-button type="primary" icon="el-icon-edit" circle v-if="seenAdd"></el-button>
 			<input id="addCategories" v-model="inputs" placeholder="请输入新类目" v-if="seenAdd">

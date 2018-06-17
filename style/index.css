@@ -120,3 +120,8 @@ a {
 #addCategories, #updateCategories {
 	width: 20%;
 }
+
+
+.edit-input {
+	width: 120px;
+}
