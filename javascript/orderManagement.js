@@ -90,6 +90,7 @@ Vue.component('orderList',{
         handlePay(index, row) {
             this.idx = index;
             this.ToChangepayStatus = true;
+            console.log(index)
         },
         changepayStatus() {
             this.tableData[this.idx].payStatus = 1;

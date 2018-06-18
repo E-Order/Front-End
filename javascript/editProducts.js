@@ -7,17 +7,29 @@ Vue.component('editProducts',{
 	        page_size: 10,
 	        url : 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/list',
 	        ToChangeproductStatus: false,
-	        idx: -1,
+	        idx: 0,
 	        productIds: null,
-	        isEditting: null,
 	        ids: '',
 	        names: '',
 	        form: {
 		        pname: '',
 		        price: '',
 		        stock: '',
-		        desc: ''
-	        }
+		        desc: '',
+		        offsale: 0,
+		        plink: ''
+	        },
+	        isEditting: null,
+	        isAdd: false,
+	        addform: {
+	        	pname: '',
+		        price: '',
+		        stock: '',
+		        desc: '',
+		        offsale: 0,
+		        plink: ''
+	        },
+	        loading: true
 		}
 	},
 	created() {
@@ -40,7 +52,9 @@ Vue.component('editProducts',{
                 for (var i = 0; i < this.tableData.length; i++) {
                 	this.productids[i] = this.tableData[i].productId
                 	this.isEditting[i] = false
+                	this.tableData[i].initialIndex = i
                 }
+                this.loading = false
             }).catch((error) => {
                 console.log(error);
             });
@@ -49,16 +63,27 @@ Vue.component('editProducts',{
             return row.productStatus === value;
         },
         setIndex(row) {
+        	console.log("1")
         	for (var i = 0; i < this.productids.length; i++) {
         		if (this.productids[i] === row.productId) {
         			this.idx = i
+        			return
         		}
         	}
+
         },
         handleOnsale(index, row) {
             this.setIndex(row)
             this.ToChangeproductStatus = true;
             this.changeproductStatus()
+            onSaleurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/onSale'
+            axios.post(onSaleurl, {params:{
+                productId: row.productId
+            }}).then((res) => {
+                console.log("on sale success")
+            }).catch((error) => {
+                console.log(error);
+            });
         },
         changeproductStatus() {
         	if (this.tableData[this.idx].productStatus === 0) {
@@ -74,21 +99,25 @@ Vue.component('editProducts',{
 
             this.ToChangeproductStatus = true;
             this.changeproductStatus()
+            offSaleurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/offSale'
+            axios.post(offSaleurl, {params:{
+                productId: row.productId
+            }}).then((res) => {
+                console.log(" off sale success")
+            }).catch((error) => {
+                console.log(error);
+            });
         },
         handleEditProduct(index, row) {
 
-        	for (var i = 0; i < this.isEditting.length; i++) {
-        		if (this.isEditting[i] == true) return
-        	}
-            this.setIndex(row)
-
-            Vue.set(this.isEditting,this.idx,true)
-
+        	
+            Vue.set(this.isEditting, row.initialIndex, true)
             this.form.pname = row.productName
             this.form.price = row.productPrice
             this.form.stock = row.productStock
             this.form.desc = row.productDescription
-
+            this.form.offsale = Boolean(row.productStatus)
+            this.form.plink=row.productIcon
         },
         handleCurrentChange(val) {
             this.cur_page = val;
@@ -97,12 +126,61 @@ Vue.component('editProducts',{
         handleSizeChange(val) {
             this.page_size = val;
         },
-        seenView(row) {
-        	this.setIndex(row)
-        	return this.isEditting[this.idx]
-        },
         submitEditting(form,row) {
-        	
+        	Vue.set(this.isEditting, row.initialIndex, false)
+        	modifiedurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/update'
+        	var offsales = 1;
+        	if (!this.form.offsale) offsales = 0
+            axios.post(modifiedurl, {params:{
+                productId: row.productId,
+                productName: this.form.pname,
+            	productPrice: this.form.price,
+            	productDescription: this.form.desc,
+            	productIcon: this.form.plink,
+            	productStock: this.form.stock,
+            	productStatus: offsales,
+            	categoryType: this.$route.params.type,
+            }}).then((res) => {
+                console.log("modify success")
+            }).catch((error) => {
+                console.log(error);
+            });
+            var temp = this.tableData[row.initialIndex]
+            temp.productName = this.form.pname
+            temp.productPrice = this.form.price
+            temp.productDescription = this.form.desc
+            temp.productIcon = this.form.plink
+            temp.productStock = this.form.stock
+            if (this.form.offsale) 
+            	temp.productStatus = 1
+            else temp.productStatus = 0
+            Vue.set(this.tableData,row.initialIndex,temp)
+            
+        },
+        submitAddition() {
+        	this.isAdd=false
+        	addurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/add'
+        	var offsales = 1;
+        	if (!this.form.offsale) offsales = 0
+            axios.post(addurl, {params:{
+                productName: this.addform.pname,
+            	productPrice: this.addform.price,
+            	productDescription: this.addform.desc,
+            	productIcon: this.addform.plink,
+            	productStock: this.addform.stock,
+            	productStatus: offsales,
+            	categoryType: this.$route.params.type,
+            }}).then((res) => {
+                this.getData()
+            }).catch((error) => {
+                console.log(error);
+            });
+            this.addform.pname = ''
+		    this.addform.price = ''
+		    this.addform.stock = ''
+		    this.addform.desc = ''
+		    this.addform.offsale = 0
+		    this.addform.plink = ''
         }
 	    
 
@@ -114,9 +192,47 @@ Vue.component('editProducts',{
 		                <el-breadcrumb-item><i class="el-icon-tickets"></i> {{this.$route.params.name + '商品列表'}}</el-breadcrumb-item>
 		            </el-breadcrumb>
 		    </div>
+		     
+		    <el-popover
+			  	placement="right"
+			  	width="400"
+			  	transition
+			  	trigger="click"
+			  	v-model="isAdd"
+			>
+			  	<el-form ref="form" :model="addform" label-width="80px" >
+	    		  	<el-form-item label="菜品名字">
+				    	<el-input v-model="addform.pname"></el-input>
+				  	</el-form-item>
+	    			<el-form-item label="菜品价格">
+				    	<el-input v-model="addform.price"></el-input>
+				  	</el-form-item>
+				  	<el-form-item label="菜品库存">
+				    	<el-input v-model="addform.stock"></el-input>
+				  	</el-form-item>
+				  	<el-form-item label="菜品描述">
+					    <el-input type="textarea" v-model="addform.desc"></el-input>
+					</el-form-item>
+					<el-form-item label="商品下架">
+					    <el-switch v-model="addform.offsale"></el-switch>
+					</el-form-item>
+					<el-form-item label="图片链接">
+				    	<el-input v-model="addform.plink"></el-input>
+				  	</el-form-item>
+					<el-form-item>
+					    <el-button  type="primary" @click="submitAddition()">提交修改</el-button>
+					</el-form-item>
+				</el-form>
+			    <el-button
+		          	size="mini"
+		          	slot="reference"
+					type="primary">添加商品</el-button>
+
+			</el-popover>
 		    <el-table
 		    	:data="tableData"
 		    	style="width: 100%"
+		    	v-loading="loading"
 		    >
 			    <el-table-column
 			      	type="expand"
@@ -124,7 +240,7 @@ Vue.component('editProducts',{
 
 			      	
 			    	<template slot-scope="props">
-			    		
+			    		<img  v-bind:src="props.row.productIcon" width="80" height="80"/>
 				        <el-form label-position="left" inline class="demo-table-expand">
 				          {{props.row.productDescription}}
 				        </el-form>
@@ -184,39 +300,59 @@ Vue.component('editProducts',{
 				          v-if="scope.row.productStatus === 1"
 				          @click="handleOnsale(scope.$index, scope.row)">上架菜品</el-button>
 				        
-				          <el-popover
-							  	placement="right"
-							  	width="400"
-							  	transition
-							  	trigger="click">
-							  	<el-form ref="form" :model="form" label-width="80px" >
-					    		  	<el-form-item label="菜品名字">
-								    	<el-input v-model="form.pname"></el-input>
-								  	</el-form-item>
-					    			<el-form-item label="菜品价格">
-								    	<el-input v-model="form.price"></el-input>
-								  	</el-form-item>
-								  	<el-form-item label="菜品库存">
-								    	<el-input v-model="form.stock"></el-input>
-								  	</el-form-item>
-								  	<el-form-item label="菜品描述">
-									    <el-input type="textarea" v-model="form.desc"></el-input>
-									</el-form-item>
-									<el-form-item>
-									    <el-button type="primary" @click="submitEditting('form',scope.row)">提交修改</el-button>
-									</el-form-item>
-							    </el-form>
-							    <el-button
-						          	size="mini"
-						          	slot="reference"
-						          	thisype="danger"
-						          	@click="handleEditProduct(scope.$index, scope.row)">编辑菜品信息</el-button>
+				        <el-popover
+						  	placement="right"
+						  	width="400"
+						  	transition
+						  	trigger="click"
+						  	v-model="isEditting[scope.row.initialIndex]"
+						>
+						  	<el-form ref="form" :model="form" label-width="80px" >
+				    		  	<el-form-item label="菜品名字">
+							    	<el-input v-model="form.pname"></el-input>
+							  	</el-form-item>
+				    			<el-form-item label="菜品价格">
+							    	<el-input v-model="form.price"></el-input>
+							  	</el-form-item>
+							  	<el-form-item label="菜品库存">
+							    	<el-input v-model="form.stock"></el-input>
+							  	</el-form-item>
+							  	<el-form-item label="菜品描述">
+								    <el-input type="textarea" v-model="form.desc"></el-input>
+								</el-form-item>
+								<el-form-item label="商品下架">
+								    <el-switch v-model="form.offsale"></el-switch>
+								</el-form-item>
+								<el-form-item label="图片链接">
+							    	<el-input v-model="form.plink"></el-input>
+							  	</el-form-item>
+								<el-form-item>
+								    <el-button  type="primary" @click="submitEditting('form',scope.row)">提交修改</el-button>
+								</el-form-item>
+									
+							</el-form>
+						    <el-button
+					          	size="mini"
+					          	type="danger"
+					          	slot="reference"
+					          	@click="handleEditProduct(scope.$index, scope.row)">编辑菜品信息</el-button>
 
-							</el-popover>
+						</el-popover>
+							
 			        </template>
 			    </el-table-column>
 			    
 		    </el-table>
+		    <div class="pagination">
+		        <el-pagination 
+		            @size-change="handleSizeChange"
+		            @current-change="handleCurrentChange"
+		            :page-sizes="[10, 20, 30, 40]"
+		            :page-size="10"
+		            layout="total, sizes, prev, pager, next, jumper"
+		            :total="40">
+		        </el-pagination>
+		    </div>
     	</div>
     `
 });

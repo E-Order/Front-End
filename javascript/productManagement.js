@@ -10,7 +10,8 @@ Vue.component('productList',{
 			inputs: '',
 			seenAdd:false,
 			isEditting:null,
-			updates:''
+			updates:'',
+			loading: true
 		}
 	},
 	created() {
@@ -46,6 +47,7 @@ Vue.component('productList',{
                     	that.isEditting[i] = false
                     }
                     that.seenAdd = true
+                    that.loading = false
                 },
                 error: function(message) {
                     console.log("error")
@@ -167,8 +169,8 @@ Vue.component('productList',{
 			    <el-button style="float: right; padding: 3px 0" type="text" @click="EditCategory">{{showText}}</el-button>
 			</div>
 			
-	        <div v-for="(value, index) in types" class="text item">
-	             <el-button type="warning" icon="el-icon-star-off" circle v-if="seenView" @click="GetDetail(index)"></el-button>
+	        <div v-for="(value, index) in types" class="text item" v-loading="loading">
+	            <el-button type="warning" icon="el-icon-star-off" circle v-if="seenView" @click="GetDetail(index)"></el-button>
 	            <el-button type="danger" icon="el-icon-delete" circle v-if="seenDelete" @click="DeleteCategory(index)"></el-button>
 			    
 			    <span v-if="!isEditting[index]">{{value}}</span>

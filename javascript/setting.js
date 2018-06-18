@@ -1,5 +1,198 @@
 Vue.component('settings',{
+	data () {
+		var validatePass = (rule, value, callback) => {
+	        if (value === '') {
+	          	callback(new Error('请输入密码'));
+	        } else {
+	          	if (this.ruleForm2.checkPass !== '') {
+	            	this.$refs.ruleForm2.validateField('checkPass');
+	          	}
+	          	var RegPass = /.{6,18}$/;
+		        if (!RegPass.test(value)) {
+		      	    callback(new Error('密码长度为6-18位'));
+		        } else {
+		      	    callback();
+		        }
+	        }
+	    };
+	    var validatePass2 = (rule, value, callback) => {
+	        if (value === '') {
+	          	callback(new Error('请再次输入密码'));
+	        } else if (value !== this.ruleForm2.pass) {
+	          	callback(new Error('两次输入密码不一致!'));
+	        } else {
+	          	callback();
+	        }
+	    };
+	    var validateOldpass = (rule, value, callback) => {
+	    	if (value === '') {
+	          	callback(new Error('请再次输入旧密码'));
+	        } else if (value !== this.userdata.password) {
+	          	callback(new Error('旧密码输入错误!'));
+	        } else {
+	          	callback();
+	        }
+	    };
+		return {
+			userdata: null,
+			loading: true,
+			isEditUsername: false,
+			isEditAddress: false,
+			isEditPhone: false,
+			isEditPassword: false,
+			username: '',
+			phone: '',
+			addr: '',
+			isFinishEditPassword: false,
+			ruleForm2: {
+	        	pass: '',
+	          	checkPass: '',
+	          	oldpass: ''
+	        },
+	        rules2: {
+	          pass: [
+	            { validator: validatePass, trigger: 'blur' }
+	          ],
+	          checkPass: [
+	            { validator: validatePass2, trigger: 'blur' }
+	          ],
+	          oldpass: [
+	            { validator: validateOldpass, trigger: 'blur' }
+	          ]
+	        }
+		}
+	},
+	created() {
+		this.fetchData()
+	},
+	watch: {
+	    // 如果路由有变化，会再次执行该方法
+	    '$route': 'fetchData'
+	},
+	methods: {
+	    fetchData () {
+			var that=this;
+			$.ajax({
+                type: "GET",
+                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
+                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/info",
+                success: function(result) {
+                    that.userdata = result.data
+                    
+                    that.loading = false
+                },
+                error: function(message) {
+                    console.log("error")
+                }
+            });
+	      
+	    },
+	    editUsername() {
+	    	var temp = this.userdata
+	    	temp.username = this.username
+	    	this.userdata = temp
+	    	this.commitModification()
+	    },
+	    editPhone() {
+	    	var temp = this.userdata
+	    	temp.phone = this.phone
+	    	this.userdata = temp
+	    	this.commitModification()
+	    },
+	    editAddress() {
+	    	var temp = this.userdata
+	    	temp.address = this.addr
+	    	this.userdata = temp
+	    	this.commitModification()
+	    },
+	    submitEditting() {
+	    	this.isFinishEditPassword = false
+	    	var temp = this.userdata
+	    	temp.password = this.ruleForm2.pass
+	    	this.userdata = temp
+	    	this.commitModification()
+	    },
+	    commitModification() {
+	    	$.ajax({
+                type: "POST",
+                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
+                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/update",
+                contentType: "application/json",
+                data: JSON.stringify(this.userdata),
+                dataType : 'json',
+                success: function(result) {
+                    console.log("success")
+                },
+                error: function(message) {
+                    console.log("error")
+                }
+            });
+	    }
+	},
 	template: `
-		<div>manage setting</div>
+		<el-card class="box-card">
+			<div slot="header" class="clearfix">
+			    <span>商家信息设置</span>
+			</div>
+			<div v-if="!loading">
+				<div>
+					<span>用户名:</span>
+					<span v-if="!isEditUsername">{{userdata.username}}</span>
+					<input id="updateCategories" v-model="username" v-if="isEditUsername" placeholder="请输入新的用户名">
+					<i class="el-icon-edit" v-if="!isEditUsername" @click="isEditUsername=true"></i>
+					<el-button type="primary" round v-if="isEditUsername" @click="editUsername">提交</el-button>
+				</div>
+				<div>
+					<span>手机号码:</span>
+					<span v-if="!isEditPhone">{{userdata.telephone}}</span>
+					<input id="updateCategories" v-model="phone" v-if="isEditPhone" placeholder="请输入新的手机号">
+					<i class="el-icon-edit" v-if="!isEditPhone" @click="isEditPhone=true"></i>
+					<el-button type="primary" round v-if="isEditPhone" @click="editPhone">提交</el-button>
+				</div>
+				<div>
+					<span>餐厅地址:</span>
+					<span v-if="!isEditAddress">{{userdata.address}}</span>
+					<input id="updateCategories" v-model="addr" v-if="isEditAddress" placeholder="请输入新的地址">
+					<i class="el-icon-edit" v-if="!isEditAddress" @click="isEditAddress=true"></i>
+					<el-button type="primary" round v-if="isEditPhone" @click="editAddress">提交</el-button>
+
+				</div>
+				<div>
+					<span>密码:</span>
+					<span v-if="!isEditPassword">******</span>
+					
+					<el-popover
+						  	placement="right"
+						  	width="400"
+						  	transition
+						  	trigger="click"
+						  	v-model="isFinishEditPassword"
+					>
+						<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+							<el-form-item label="旧密码" prop="oldpass">
+								<el-input type="password" v-model="ruleForm2.oldpass" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="密码" prop="pass">
+								<el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="确认密码" prop="checkPass">
+								<el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item>
+							    <el-button  type="primary" @click="submitEditting()">提交修改</el-button>
+							</el-form-item>
+						</el-form>
+					    <el-button
+				          	size="mini"
+				          	type="danger"
+				          	slot="reference">修改密码</el-button>
+
+					</el-popover>
+
+				</div>
+			</div>
+	        
+
+		</el-card>
 	`
 });
