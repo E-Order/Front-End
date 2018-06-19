@@ -157,7 +157,7 @@ Vue.component('orderList',{
 	      type="expand">
 	     <template slot-scope="props">
 	        <el-form label-position="left" inline class="demo-table-expand">
-	          <el-form-item v-for="item in props.row.orderDetailList" >
+	          <el-form-item v-for="(item,index) in props.row.orderDetailList" :key="index">
 	            <span>{{ item.productName }}   * {{ item.productQuantity }} = {{item.productPrice}}</span>
 	          </el-form-item>
 	        </el-form>
