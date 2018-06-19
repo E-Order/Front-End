@@ -124,7 +124,7 @@ Vue.component('signupshow', {
   
     template: `
 	    <div id="SignUpTable">
-			<img id="peo" src="../assets/people.png">
+			<img id="peo" src="../images/people.png">
 			<div>
 				<p id="SignTitle">Sign Up For E-Order</p>
 			</div>

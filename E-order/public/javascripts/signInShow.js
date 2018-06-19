@@ -78,7 +78,7 @@ Vue.component('signinshow', {
   
     template: `
 	    <div id="SignInTable">
-	    	<img id="peo" src="../assets/people.png">
+	    	<img id="peo" src="../images/people.png">
 			<div>
 				<p id="SignTitle">Sign In For E-Order</p>
 			</div>
