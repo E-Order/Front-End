@@ -163,25 +163,27 @@ Vue.component('productList',{
 
     },
 	template: `
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-			    <span>菜品种类</span>
-			    <el-button style="float: right; padding: 3px 0" type="text" @click="EditCategory">{{showText}}</el-button>
-			</div>
-			
-	        <div v-for="(value, index) in types" class="text item" v-loading="loading">
-	            <el-button type="warning" icon="el-icon-star-off" circle v-if="seenView" @click="GetDetail(index)"></el-button>
-	            <el-button type="danger" icon="el-icon-delete" circle v-if="seenDelete" @click="DeleteCategory(index)"></el-button>
-			    
-			    <span v-if="!isEditting[index]">{{value}}</span>
-			    <input id="updateCategories" v-model="updates" placeholder="修改类目" v-if="isEditting[index]">
-			    <i class="el-icon-edit" v-if="seenView&&!isEditting[index]" @click="updateCategory(index)"></i>
-			    <el-button type="primary" round v-if="isEditting[index]" @click="commitUpdateCategory(index)">提交</el-button>
-			</div>
-			<el-button type="primary" icon="el-icon-edit" circle v-if="seenAdd"></el-button>
-			<input id="addCategories" v-model="inputs" placeholder="请输入新类目" v-if="seenAdd">
-			<el-button type="primary" round v-if="seenAdd" @click="AddCategory">提交</el-button>
+		<div id = "mealList">
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+				    <span>菜品种类</span>
+				    <el-button style="float: right; padding: 3px 0" type="text" @click="EditCategory">{{showText}}</el-button>
+				</div>
+				
+		        <div v-for="(value, index) in types" class="text_item" v-loading="loading">
+		            <el-button type="warning" icon="el-icon-star-off" circle v-if="seenView" @click="GetDetail(index)"></el-button>
+		            <el-button type="danger" icon="el-icon-delete" circle v-if="seenDelete" @click="DeleteCategory(index)"></el-button>
+				    
+				    <span v-if="!isEditting[index]">{{value}}</span>
+				    <input id="updateCategories" v-model="updates" placeholder="修改类目" v-if="isEditting[index]">
+				    <i class="el-icon-edit" v-if="seenView&&!isEditting[index]" @click="updateCategory(index)"></i>
+				    <el-button type="primary" round v-if="isEditting[index]" @click="commitUpdateCategory(index)">提交</el-button>
+				</div>
+				<el-button type="primary" icon="el-icon-edit" circle v-if="seenAdd"></el-button>
+				<input id="addCategories" v-model="inputs" placeholder="请输入新类目" v-if="seenAdd">
+				<el-button type="primary" round v-if="seenAdd" @click="AddCategory">提交</el-button>
 
-		</el-card>
+			</el-card>
+		</div>
 	`
 });

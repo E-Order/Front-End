@@ -187,7 +187,7 @@ Vue.component('editProducts',{
     },
     template: `
     	<div class="productlist">
-	    	<div class="crumbs">
+	    	<div id="crumbs">
 		            <el-breadcrumb separator="/">
 		                <el-breadcrumb-item><i class="el-icon-tickets"></i> {{this.$route.params.name + '商品列表'}}</el-breadcrumb-item>
 		            </el-breadcrumb>

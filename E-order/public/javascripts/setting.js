@@ -155,69 +155,71 @@ Vue.component('settings',{
 	    }
 	},
 	template: `
-		<el-card class="box-card">
-			<div slot="header" class="clearfix">
-			    <span>商家信息设置</span>
-			</div>
-			<div v-if="!loading">
-				<div>
-					<span>用户名:</span>
-					<span v-if="!isEditUsername">{{userdata.username}}</span>
-					<input id="updateCategories" v-model="username" v-if="isEditUsername" placeholder="请输入新的用户名">
-					<i class="el-icon-edit" v-if="!isEditUsername" @click="isEditUsername=true"></i>
-					<el-button type="primary" round v-if="isEditUsername" @click="editUsername">提交</el-button>
+		<div id = "setting">
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+				    <span>商家信息设置</span>
 				</div>
-				<div>
-					<span>手机号码:</span>
-					<span v-if="!isEditPhone">{{userdata.telephone}}</span>
-					<input id="updateCategories" v-model="phone" v-if="isEditPhone" placeholder="请输入新的手机号">
-					<i class="el-icon-edit" v-if="!isEditPhone" @click="isEditPhone=true"></i>
-					<el-button type="primary" round v-if="isEditPhone" @click="editPhone">提交</el-button>
+				<div v-if="!loading">
+					<div class = "item">
+						<span>用户名:</span>
+						<span v-if="!isEditUsername">{{userdata.username}}</span>
+						<input id="updateCategories" v-model="username" v-if="isEditUsername" placeholder="请输入新的用户名">
+						<i class="el-icon-edit" v-if="!isEditUsername" @click="isEditUsername=true"></i>
+						<el-button type="primary" round v-if="isEditUsername" @click="editUsername">提交</el-button>
+					</div>
+					<div class = "item">
+						<span>手机号码:</span>
+						<span v-if="!isEditPhone">{{userdata.telephone}}</span>
+						<input id="updateCategories" v-model="phone" v-if="isEditPhone" placeholder="请输入新的手机号">
+						<i class="el-icon-edit" v-if="!isEditPhone" @click="isEditPhone=true"></i>
+						<el-button type="primary" round v-if="isEditPhone" @click="editPhone">提交</el-button>
+					</div>
+					<div class = "item">
+						<span>餐厅地址:</span>
+						<span v-if="!isEditAddress">{{userdata.address}}</span>
+						<input id="updateCategories" v-model="addr" v-if="isEditAddress" placeholder="请输入新的地址">
+						<i class="el-icon-edit" v-if="!isEditAddress" @click="isEditAddress=true"></i>
+						<el-button type="primary" round v-if="isEditAddress" @click="editAddress">提交</el-button>
+
+					</div>
+					<div class = "item">
+						<span>密码:</span>
+						<span v-if="!isEditPassword">******</span>
+						
+						<el-popover
+							  	placement="right"
+							  	width="400"
+							  	transition
+							  	trigger="click"
+							  	v-model="isFinishEditPassword"
+						>
+							<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
+								<el-form-item label="旧密码" prop="oldpass">
+									<el-input type="password" v-model="ruleForm2.oldpass" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="密码" prop="pass">
+									<el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item label="确认密码" prop="checkPass">
+									<el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
+								</el-form-item>
+								<el-form-item>
+								    <el-button  type="primary" @click="submitEditting()">提交修改</el-button>
+								</el-form-item>
+							</el-form>
+						    <el-button
+					          	size="mini"
+					          	type="danger"
+					          	slot="reference">修改密码</el-button>
+
+						</el-popover>
+
+					</div>
 				</div>
-				<div>
-					<span>餐厅地址:</span>
-					<span v-if="!isEditAddress">{{userdata.address}}</span>
-					<input id="updateCategories" v-model="addr" v-if="isEditAddress" placeholder="请输入新的地址">
-					<i class="el-icon-edit" v-if="!isEditAddress" @click="isEditAddress=true"></i>
-					<el-button type="primary" round v-if="isEditAddress" @click="editAddress">提交</el-button>
+		        
 
-				</div>
-				<div>
-					<span>密码:</span>
-					<span v-if="!isEditPassword">******</span>
-					
-					<el-popover
-						  	placement="right"
-						  	width="400"
-						  	transition
-						  	trigger="click"
-						  	v-model="isFinishEditPassword"
-					>
-						<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
-							<el-form-item label="旧密码" prop="oldpass">
-								<el-input type="password" v-model="ruleForm2.oldpass" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="密码" prop="pass">
-								<el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="确认密码" prop="checkPass">
-								<el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item>
-							    <el-button  type="primary" @click="submitEditting()">提交修改</el-button>
-							</el-form-item>
-						</el-form>
-					    <el-button
-				          	size="mini"
-				          	type="danger"
-				          	slot="reference">修改密码</el-button>
-
-					</el-popover>
-
-				</div>
-			</div>
-	        
-
-		</el-card>
+			</el-card>
+		</div>
 	`
 });

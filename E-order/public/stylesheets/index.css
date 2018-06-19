@@ -74,6 +74,14 @@ html,body {
 	border-radius:25px;
 	-moz-border-radius:25px; /* Old Firefox */
 }
+#mealList .text_item{
+	height:100px;
+	width:300px;
+}
+#setting .item {
+	height:50px;
+	width:300px;
+}
 #crumbs {
 	height:50px;
 	width:300px;
