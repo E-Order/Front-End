@@ -74,6 +74,10 @@ html,body {
 	border-radius:25px;
 	-moz-border-radius:25px; /* Old Firefox */
 }
+#crumbs {
+	height:50px;
+	width:300px;
+}
 #inputa,#inputb, #confirm, #tel, #addr {
 	width:200px;
 }

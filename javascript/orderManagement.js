@@ -91,7 +91,6 @@ Vue.component('orderList',{
         handlePay(index, row) {
             this.idx = row.index;
             this.ToChangepayStatus = true;
-            console.log(index)
         },
         changepayStatus() {
             this.tableData[this.idx].payStatus = 1;
@@ -138,13 +137,21 @@ Vue.component('orderList',{
         },
         handleSizeChange(val) {
             this.page_size = val;
-        }
+        },
+     //    tableRowClassName({row, rowIndex}) {
+	    //     if (row.payStatus === 0) {
+	    //       return 'warning-row';
+	    //     } else{
+	    //       return 'success-row';
+	    //     }
+	    //     return '';
+	    // }
     },
 
 
     template:`
     <div class="orderList">
-	    <div class="crumbs">
+	    <div id="crumbs">
 	            <el-breadcrumb separator="/">
 	                <el-breadcrumb-item><i class="el-icon-tickets"></i> 订单列表</el-breadcrumb-item>
 	            </el-breadcrumb>
@@ -227,7 +234,7 @@ Vue.component('orderList',{
 	          disable-transitions>进行中</el-tag>
 	      </template>
 	    </el-table-column>
-	    <el-table-column label="操作">
+	    <el-table-column label="操作" width="300">
 	      <template slot-scope="scope">
 	        <el-button
 	          size="mini"
