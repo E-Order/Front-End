@@ -64,6 +64,7 @@ Vue.component('orderList',{
                 this.tableData = res.data.data;
 
                 for (var i = 0; i < this.tableData.length; i++) {
+                	Vue.set(this.tableData[i],'index',i);
                     this.getDetail(i);
                 }
             }).catch((error) => {
@@ -88,7 +89,7 @@ Vue.component('orderList',{
             return row.orderStatus === value;
         },
         handlePay(index, row) {
-            this.idx = index;
+            this.idx = row.index;
             this.ToChangepayStatus = true;
             console.log(index)
         },
@@ -97,7 +98,7 @@ Vue.component('orderList',{
             this.ToChangepayStatus = false;
         },
         handleDelete(index, row) {
-            this.idx = index;
+            this.idx = row.index;
             this.Todelete = true;
         },
         deleteOrder() {
@@ -108,7 +109,7 @@ Vue.component('orderList',{
             ).then((res) => {
                 //console.log(res);
                 // this.tableData.splice(this.idx, 1);
-                this.tableData[this.idx].orderStatus = -1;
+                this.tableData[this.idx].orderStatus = 2;
                 this.$message.success('成功');
                 this.Todelete = false;
             }).catch((error) => {
@@ -116,7 +117,7 @@ Vue.component('orderList',{
             });
         },
         handleFinish(index, row) {
-            this.idx = index;
+            this.idx = row.index;
             this.Tofinish = true;
         },
         finishOrder() {
@@ -126,7 +127,6 @@ Vue.component('orderList',{
                 }
             ).then((res) => {
                 this.tableData[this.idx].orderStatus = 1;
-                console.log(this.tableData);
                 this.Tofinish = false;
             }).catch((error) => {
                 console.log(error);
@@ -209,7 +209,7 @@ Vue.component('orderList',{
 	      prop="orderStatus"
 	      label="订单状态"
 	      width="100"
-	      :filters="[{ text: '进行中', value: 0 }, { text: '已完结', value: 1 }, { text: '已取消', value: -1 }]"
+	      :filters="[{ text: '进行中', value: 0 }, { text: '已完结', value: 1 }, { text: '已取消', value: 2 }]"
 	      :filter-method="filterorderStatus"
 	      filter-placement="bottom-end">
 	      <template slot-scope="scope">
@@ -219,7 +219,7 @@ Vue.component('orderList',{
 	          disable-transitions>已完结</el-tag>
 	        <el-tag
 	          type="danger"
-	          v-else-if="scope.row.orderStatus === -1"
+	          v-else-if="scope.row.orderStatus === 2"
 	          disable-transitions>已取消</el-tag>
 	        <el-tag
 	          type="success"
