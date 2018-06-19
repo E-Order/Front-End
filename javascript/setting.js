@@ -88,22 +88,47 @@ Vue.component('settings',{
 	      
 	    },
 	    editUsername() {
+	    	if (this.username === '') {
+	    		alert("用户名不能为空")
+	    		return
+	    	}
+	    	var RegUserName = /^[a-zA-Z]+[a-zA-Z0-9_]{5,17}$/;
+	    	if (!RegUserName.test(this.username)) {
+	    		alert("用户名要以字母开头，由6-18字母和数字组成")
+	    		return
+	    	}
 	    	var temp = this.userdata
 	    	temp.username = this.username
 	    	this.userdata = temp
 	    	this.commitModification()
+	    	this.isEditUsername = false
 	    },
 	    editPhone() {
+	    	if (this.phone === '') {
+	    		alert("联系方式不能为空")
+	    		return
+	    	}
+	    	var RegTel = /^1[0-9]{10}$/;
+	    	if (!RegTel.test(this.phone)) {
+	    		alert('手机号码的格式为以1开头的11位数字')
+	    		return
+	    	}
 	    	var temp = this.userdata
-	    	temp.phone = this.phone
+	    	temp.telephone = this.phone
 	    	this.userdata = temp
 	    	this.commitModification()
+	    	this.isEditPhone = false
 	    },
 	    editAddress() {
+	    	if (this.addr === '') {
+	    		alert("餐厅地址不能为空")
+	    		return
+	    	}
 	    	var temp = this.userdata
 	    	temp.address = this.addr
 	    	this.userdata = temp
 	    	this.commitModification()
+	    	this.isEditAddress = false
 	    },
 	    submitEditting() {
 	    	this.isFinishEditPassword = false
@@ -154,7 +179,7 @@ Vue.component('settings',{
 					<span v-if="!isEditAddress">{{userdata.address}}</span>
 					<input id="updateCategories" v-model="addr" v-if="isEditAddress" placeholder="请输入新的地址">
 					<i class="el-icon-edit" v-if="!isEditAddress" @click="isEditAddress=true"></i>
-					<el-button type="primary" round v-if="isEditPhone" @click="editAddress">提交</el-button>
+					<el-button type="primary" round v-if="isEditAddress" @click="editAddress">提交</el-button>
 
 				</div>
 				<div>

@@ -36,7 +36,7 @@ const router = new VueRouter({
       path: '/contact',
       components: {
         naviBar: beforeNavi,
-        mainContent: product
+        mainContent: con
       }
     },
     {
