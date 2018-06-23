@@ -32,39 +32,86 @@ Vue.component('orderList',{
         //   orderStatus: '已取消'
         // }],
         tableData: [],
+        criteria: {
+          orderId: "",
+          deskId: "",
+          orderDate: "",
+          payStatus: "",
+          orderStatus: ""
+        },
+        searchCriteria: {
+          orderId: "",
+          deskId: "",
+          orderDate: "",
+          payStatus: "",
+          orderStatus: ""
+        },
+        typeData: [
+          {value: 1, label:'全部'},
+          {value: 2, label: '账户名'},
+          {value: 3, label: '机构名称'},
+          {value: 4, label: '手机号码'},
+          {value: 5, label: '联系人'}],
+        orderNum: 0,
         length: 0,
         cur_page: 1,
         page_size: 10,
-        url : 'https://private-5e210-ordermeal.apiary-mock.com/eorder/buyer/seller/list',
+        url : 'http://www.e-order.cn:8080/eorder/seller/order/list',
         ToChangepayStatus: false,
         idx: -1,
         Todelete: false,
-        Tofinish: false
+        Tofinish: false,
+        orderStatusFilter: [{ text: '进行中', value: 0 }, { text: '已完结', value: 1 }, { text: '已取消', value: 2 }, { text: '全部', value: "" }],
+        payStatusFilter: [{ text: '已支付', value: 1 }, { text: '未支付', value: 0 }, { text: '全部', value: "" }]
       }
     },
     created() {
         this.getData();
     },
     methods: {
+    	Format(dd, fmt) { //author: meizz 
+    		var date = new Date(dd);
+		    var o = {
+		        "M+": date.getMonth() + 1, //月份 
+		        "d+": date.getDate(), //日 
+		        "h+": date.getHours(), //小时 
+		        "m+": date.getMinutes(), //分 
+		        "s+": date.getSeconds(), //秒 
+		        "q+": Math.floor((date.getMonth() + 3) / 3), //季度 
+		        "S": date.getMilliseconds() //毫秒 
+		    };
+		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		},
         getDetail(i) {
-             axios.get("https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/order/detail", {params:{
+             axios.get("http://www.e-order.cn:8080/eorder/seller/order/detail", {params:{
                 orderId: this.tableData[i].orderId
             }}).then((res) => {
-                Vue.set(this.tableData[i],'orderDetailList',res.data.data.orderDetailList)
+                Vue.set(this.tableData[i],'orderDetailList',res.data.data.orderDetailList);
             }).catch((error) => {
                 console.log(error);
             });
         },
         getData() {
+        	axios.defaults.withCredentials = true;
             axios.get(this.url, {params:{
+            	orderId: this.searchCriteria.orderId,
+            	deskId: this.searchCriteria.deskId,
+            	orderStatus: this.searchCriteria.orderStatus,
+            	payStatus: this.searchCriteria.payStatus,
+            	orderDate: this.searchCriteria.orderDate,
                 page: this.cur_page,
                 size: this.page_size
             }}).then((res) => {
-
+            	console.log(res);
                 this.tableData = res.data.data;
-
+                this.orderNum = res.data.total;
                 for (var i = 0; i < this.tableData.length; i++) {
                 	Vue.set(this.tableData[i],'index',i);
+                	d = this.Format(this.tableData[i].updateTime,"yyyy-MM-dd");
+                	Vue.set(this.tableData[i],'date',d);
                     this.getDetail(i);
                 }
             }).catch((error) => {
@@ -72,7 +119,7 @@ Vue.component('orderList',{
             });
         },
         // showDetail(index, row){
-        //     axios.get("https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/order/detail", {params:{
+        //     axios.get("http://www.e-order.cn:8080/eorder/seller/order/detail", {params:{
         //         orderId: row.orderId
         //     }}).then((res) => {
         //         this.tableData[index] = Object.assign({}, res.data.data);
@@ -101,7 +148,7 @@ Vue.component('orderList',{
             this.Todelete = true;
         },
         deleteOrder() {
-            axios.post("https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/order/cancel",
+            axios.post("http://www.e-order.cn:8080/eorder/seller/order/cancel",
                 {
                     orderId: this.tableData[this.idx].orderId
                 }
@@ -120,7 +167,7 @@ Vue.component('orderList',{
             this.Tofinish = true;
         },
         finishOrder() {
-            axios.post("https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/order/finish",
+            axios.post("http://www.e-order.cn:8080/eorder/seller/order/finish",
                 {
                     orderId: this.tableData[this.idx].orderId
                 }
@@ -137,6 +184,7 @@ Vue.component('orderList',{
         },
         handleSizeChange(val) {
             this.page_size = val;
+            this.getData();
         },
      //    tableRowClassName({row, rowIndex}) {
 	    //     if (row.payStatus === 0) {
@@ -146,6 +194,23 @@ Vue.component('orderList',{
 	    //     }
 	    //     return '';
 	    // }
+	    Search() {
+	    	this.cur_page = 1;
+	    	this.searchCriteria = this.criteria;
+	    	this.getData();
+	    },
+	    reSetSearch() {
+	    	this.criteria = {
+	          orderId: '',
+	          deskId: '',
+	          orderDate: '',
+	          payStatus: '',
+	          orderStatus: ''
+	        }
+	    },
+	    handleFilterChange(filters) {
+	    	console.log(filters);
+	    }
     },
 
 
@@ -155,10 +220,53 @@ Vue.component('orderList',{
 	            <el-breadcrumb separator="/">
 	                <el-breadcrumb-item><i class="el-icon-tickets"></i> 订单列表</el-breadcrumb-item>
 	            </el-breadcrumb>
-	     </div>
-
+	    </div>
+	    <div id="search-box">
+		  订单号:
+		  <el-input
+		    placeholder="请输入订单号"
+		    v-model="criteria.orderId">
+		  </el-input>
+		  桌号：
+		  <el-input
+		    placeholder="请输入桌号"
+		    v-model="criteria.deskId">
+		  </el-input>
+		  日期：
+		  <el-date-picker
+		      v-model="criteria.orderDate"
+		      type="date"
+		      placeholder="选择日期">
+		  </el-date-picker>
+		  支付状态：
+		  <el-select v-model="criteria.payStatus" placeholder="请选择支付状态">
+		    <el-option
+		      v-for="item in payStatusFilter"
+		      :key="item.value"
+		      :label="item.text"
+		      :value="item.value">
+		    </el-option>
+		  </el-select>
+		  订单状态：
+		  <el-select v-model="criteria.orderStatus" placeholder="请选择订单状态">
+		    <el-option
+		      v-for="item in orderStatusFilter"
+		      :key="item.value"
+		      :label="item.text"
+		      :value="item.value">
+		    </el-option>
+		  </el-select>
+		  <el-button
+	          size="small"
+	          type="primary"
+	          @click="Search">搜索</el-button>
+	      <el-button
+	          size="mini"
+	          @click="reSetSearch">重置</el-button>
+		</div>
 	    <el-table
-	    :data="tableData"
+	    :data="tableData.slice((cur_page-1)*page_size,cur_page*page_size)"
+	    @filter-change="handleFilterChange"
 	    style="width: 100%">
 	    <el-table-column
 	      type="expand">
@@ -184,7 +292,7 @@ Vue.component('orderList',{
 	      width="100">
 	    </el-table-column>
 	    <el-table-column
-	      prop="updateTime"
+	      prop="date"
 	      label="日期"
 	      sortable
 	      width="120">
@@ -198,8 +306,6 @@ Vue.component('orderList',{
 	      prop="payStatus"
 	      label="支付状态"
 	      width="100"
-	      :filters="[{ text: '已支付', value: 1 }, { text: '未支付', value: 0 }]"
-	      :filter-method="filterpayStatus"
 	      filter-placement="bottom-end">
 	      <template slot-scope="scope">
 	        <el-tag
@@ -216,8 +322,6 @@ Vue.component('orderList',{
 	      prop="orderStatus"
 	      label="订单状态"
 	      width="100"
-	      :filters="[{ text: '进行中', value: 0 }, { text: '已完结', value: 1 }, { text: '已取消', value: 2 }]"
-	      :filter-method="filterorderStatus"
 	      filter-placement="bottom-end">
 	      <template slot-scope="scope">
 	        <el-tag
@@ -267,7 +371,7 @@ Vue.component('orderList',{
 	            :page-sizes="[10, 20, 30, 40]"
 	            :page-size="10"
 	            layout="total, sizes, prev, pager, next, jumper"
-	            :total="400">
+	            :total="orderNum">
 	        </el-pagination>
 	    </div>
 	          <!-- 支付提示框 -->

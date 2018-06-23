@@ -5,7 +5,7 @@ Vue.component('editProducts',{
 	        length: 0,
 	        cur_page: 1,
 	        page_size: 10,
-	        url : 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/list',
+	        url : 'http://www.e-order.cn:8080/eorder/seller/product/list',
 	        ToChangeproductStatus: false,
 	        idx: 0,
 	        productIds: null,
@@ -41,11 +41,13 @@ Vue.component('editProducts',{
 	},
 	methods: {
         getData() {
+        	axios.defaults.withCredentials = true;
             axios.get(this.url, {params:{
                 page: this.cur_page,
                 size: this.page_size,
                 categoryType: this.$route.params.type
             }}).then((res) => {
+            	console.log(res);
                 this.tableData = res.data.data;
                 this.productids = new Array()
                 this.isEditting = new Array()
@@ -76,13 +78,30 @@ Vue.component('editProducts',{
             this.setIndex(row)
             this.ToChangeproductStatus = true;
             this.changeproductStatus()
-            onSaleurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/onSale'
-            axios.post(onSaleurl, {params:{
-                productId: row.productId
-            }}).then((res) => {
-                console.log("on sale success")
-            }).catch((error) => {
-                console.log(error);
+            onSaleurl = 'http://www.e-order.cn:8080/eorder/seller/product/onSale'
+            // axios.post(onSaleurl, {
+            //     productId: row.productId
+            // }).then((res) => {
+            //     console.log("on sale success")
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            reqbody = {
+            	productId: row.productId
+            }
+            $.ajax({
+                type: "POST",
+                url: onSaleurl,
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+                	console.log("on sale success")
+                },
+                error: function(message) {
+                    console.log("error")
+                }
             });
         },
         changeproductStatus() {
@@ -99,13 +118,31 @@ Vue.component('editProducts',{
 
             this.ToChangeproductStatus = true;
             this.changeproductStatus()
-            offSaleurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/offSale'
-            axios.post(offSaleurl, {params:{
-                productId: row.productId
-            }}).then((res) => {
-                console.log(" off sale success")
-            }).catch((error) => {
-                console.log(error);
+            offSaleurl = 'http://www.e-order.cn:8080/eorder/seller/product/offSale'
+
+            // axios.post(offSaleurl, {params:{
+            //     productId: row.productId
+            // }}).then((res) => {
+            //     console.log(" off sale success")
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            reqbody = {
+            	productId: row.productId
+            }
+            $.ajax({
+                type: "POST",
+                url: offSaleurl,
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+                	console.log(" off sale success")
+                },
+                error: function(message) {
+                    console.log("error")
+                }
             });
         },
         handleEditProduct(index, row) {
@@ -128,11 +165,25 @@ Vue.component('editProducts',{
         },
         submitEditting(form,row) {
         	Vue.set(this.isEditting, row.initialIndex, false)
-        	modifiedurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/update'
+        	modifiedurl = 'http://www.e-order.cn:8080/eorder/seller/product/update'
         	var offsales = 1;
         	if (!this.form.offsale) offsales = 0
-            axios.post(modifiedurl, {params:{
-                productId: row.productId,
+            // axios.post(modifiedurl, {params:{
+            //     productId: row.productId,
+            //     productName: this.form.pname,
+            // 	productPrice: this.form.price,
+            // 	productDescription: this.form.desc,
+            // 	productIcon: this.form.plink,
+            // 	productStock: this.form.stock,
+            // 	productStatus: offsales,
+            // 	categoryType: this.$route.params.type,
+            // }}).then((res) => {
+            //     console.log("modify success")
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            reqbody = {
+            	productId: row.productId,
                 productName: this.form.pname,
             	productPrice: this.form.price,
             	productDescription: this.form.desc,
@@ -140,40 +191,65 @@ Vue.component('editProducts',{
             	productStock: this.form.stock,
             	productStatus: offsales,
             	categoryType: this.$route.params.type,
-            }}).then((res) => {
-                console.log("modify success")
-            }).catch((error) => {
-                console.log(error);
+            }
+            $.ajax({
+                type: "POST",
+                url: modifiedurl,
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+                	console.log("modify success")
+                },
+                error: function(message) {
+                    console.log("error")
+                }
             });
-            var temp = this.tableData[row.initialIndex]
-            temp.productName = this.form.pname
-            temp.productPrice = this.form.price
-            temp.productDescription = this.form.desc
-            temp.productIcon = this.form.plink
-            temp.productStock = this.form.stock
-            if (this.form.offsale) 
-            	temp.productStatus = 1
-            else temp.productStatus = 0
-            Vue.set(this.tableData,row.initialIndex,temp)
             
         },
         submitAddition() {
         	this.isAdd=false
-        	addurl = 'https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/product/add'
+        	addurl = 'http://www.e-order.cn:8080/eorder/seller/product/add'
         	var offsales = 1;
         	if (!this.form.offsale) offsales = 0
-            axios.post(addurl, {params:{
+            // axios.post(addurl, {params:{
+             //    productName: this.addform.pname,
+            	// productPrice: this.addform.price,
+            	// productDescription: this.addform.desc,
+            	// productIcon: this.addform.plink,
+            	// productStock: this.addform.stock,
+            	// productStatus: offsales,
+            // 	categoryType: this.$route.params.type,
+            // }}).then((res) => {
+            //     this.getData()
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            var that=this;
+            reqbody = {
                 productName: this.addform.pname,
             	productPrice: this.addform.price,
             	productDescription: this.addform.desc,
             	productIcon: this.addform.plink,
             	productStock: this.addform.stock,
             	productStatus: offsales,
-            	categoryType: this.$route.params.type,
-            }}).then((res) => {
-                this.getData()
-            }).catch((error) => {
-                console.log(error);
+            	categoryType: this.$route.params.type
+            }
+            $.ajax({
+                type: "POST",
+                url: addurl,
+                xhrFields: {withCredentials: true},
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+                	that.getData()
+                },
+                error: function(message) {
+                    console.log("error")
+                }
             });
             this.addform.pname = ''
 		    this.addform.price = ''

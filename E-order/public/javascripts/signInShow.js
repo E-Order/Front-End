@@ -46,15 +46,15 @@ Vue.component('signinshow', {
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 	            	var reqbody = {
-					    'username':user,
-					    'password':pass
+					    username: user,
+					    password: pass
 					};
 					$.ajax({
 		                type: "POST",
-		                // url: "http://www.e-order.cn:8080/eorder/seller/signin",
-		                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
-		                contentType: "application/json",
-		                data: JSON.stringify(reqbody),
+		                url: "http://www.e-order.cn:8080/eorder/seller/signin",
+		                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+		                contentType: "application/x-www-form-urlencoded",
+		                data: Qs.stringify(reqbody),
 		                dataType : 'json', 
 		                success: function(result) {
 		                	store.commit('UpdateUserId', result.sellerId)

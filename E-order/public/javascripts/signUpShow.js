@@ -92,16 +92,18 @@ Vue.component('signupshow', {
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 		          	var reqbody = {
-					    'username':user,
-					    'password':pass,
-					    'telephone':tel,
-					    'address':addr
+					    username: user,
+					    password: pass,
+					    telephone: tel,
+					    address: addr
 					};
+
 		          	$.ajax({
 		                type: "POST",
-		                url: "https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signup",
-		                contentType: "application/json",
-		                data: JSON.stringify(reqbody),
+		                url: "http://www.e-order.cn:8080/eorder/seller/signup",
+		                //url: "https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signup",
+		                contentType: "application/x-www-form-urlencoded",
+		                data: Qs.stringify(reqbody),
 		                dataType : 'json', 
 		                success: function(result) {
 		                    router.push({ path: '/signin' })
@@ -110,6 +112,17 @@ Vue.component('signupshow', {
 		                    console.log("error")
 		                }
 		            });
+
+		       //      axios.post("http://www.e-order.cn:8080/eorder/seller/signup", {
+		       //          username: user,
+					    // password: pass,
+					    // telephone: tel,
+					    // address: addr
+		       //      }).then((res) => {
+		       //          router.push({ path: '/signin' })
+		       //      }).catch((error) => {
+		       //          console.log(error);
+		       //      });
 	            } else {
 	            	console.log('error submit!!');
 	            	return false;

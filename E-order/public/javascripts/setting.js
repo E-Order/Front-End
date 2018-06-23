@@ -74,12 +74,14 @@ Vue.component('settings',{
 			var that=this;
 			$.ajax({
                 type: "GET",
-                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
-                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/info",
+                url: "http://www.e-order.cn:8080/eorder/seller/info",
+                xhrFields: {withCredentials: true},
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/info",
                 success: function(result) {
-                    that.userdata = result.data
+                	console.log(result);
+                    that.userdata = result.data;
                     
-                    that.loading = false
+                    that.loading = false;
                 },
                 error: function(message) {
                     console.log("error")
@@ -140,10 +142,11 @@ Vue.component('settings',{
 	    commitModification() {
 	    	$.ajax({
                 type: "POST",
-                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
-                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/update",
-                contentType: "application/json",
-                data: JSON.stringify(this.userdata),
+                url: "http://www.e-order.cn:8080/eorder/seller/category/list",
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/update",
+                contentType: "application/x-www-form-urlencoded",
+                xhrFields: {withCredentials: true},
+                data: Qs.stringify(this.userdata),
                 dataType : 'json',
                 success: function(result) {
                     console.log("success")

@@ -86,6 +86,10 @@ html,body {
 	height:50px;
 	width:300px;
 }
+#search-box .el-input {
+	height:50px;
+	width:100px;
+}
 #inputa,#inputb, #confirm, #tel, #addr {
 	width:200px;
 }

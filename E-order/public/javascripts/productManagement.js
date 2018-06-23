@@ -24,17 +24,18 @@ Vue.component('productList',{
 	methods: {
 	    fetchData () {
 	        var reqbody = {
-			    // 'username':store.state.userId
-			    'userId':"123456"
+			    //  'username':store.state.userId
+			    // 'userId':"123456"
 			};
 			var that=this;
 			$.ajax({
                 type: "GET",
-                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
-                url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/category/list",
-                contentType: "application/json",
-                data: JSON.stringify(reqbody),
-                dataType : 'json', 
+                 url: "http://www.e-order.cn:8080/eorder/seller/category/list",
+                //url:"https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/category/list",
+                //contentType: "application/json",
+                //data: JSON.stringify(reqbody),
+                //dataType : 'json', 
+                xhrFields: {withCredentials: true},
                 success: function(result) {
                     that.types = new Array()
                     that.categoryId = new Array()
@@ -69,17 +70,18 @@ Vue.component('productList',{
 	    DeleteCategory(index) {
 	    	var reqbody = {
 			    // 'username':store.state.userId,
-			    'userId':"123456",
+			    //'userId':"123456",
 			    'categoryId':this.categoryId[index]
 			};
 			var that=this;
 			that.types.splice(index, 1)
 			$.ajax({
                 type: "POST",
-                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
-                url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/delete",
-                contentType: "application/json",
-                data: JSON.stringify(reqbody),
+                url: "http://www.e-order.cn:8080/eorder/seller/category/delete",
+                //url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/delete",
+                contentType: "application/x-www-form-urlencoded",
+                xhrFields: {withCredentials: true},
+                data: Qs.stringify(reqbody),
                 dataType : 'json', 
                 success: function(result) {
                     console.log("success")
@@ -98,23 +100,25 @@ Vue.component('productList',{
 	    	}
 	    	var reqbody = {
 			    // 'username':store.state.userId,
-			    'username':"123456",
+			    //'username':"123456",
 			    'categoryName':this.inputs,
 			    'categoryType': ctype
 			};
+			//console.log(reqbody);
 			var that=this;
 			that.types[that.types.length] = that.inputs
 			that.categoryType[that.categoryType.length] = ctype
             that.inputs = ''
 			$.ajax({
                 type: "POST",
-                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
-                url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
-                contentType: "application/json",
-                data: JSON.stringify(reqbody),
+                url: "http://www.e-order.cn:8080/eorder/seller/category/add",
+                //url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
+                contentType: "application/x-www-form-urlencoded",
+                xhrFields: {withCredentials: true},
+                data: Qs.stringify(reqbody),
                 dataType : 'json', 
                 success: function(result) {
-                    that.categoryId[that.categoryId.length] = result.data.categoryId
+                    that.categoryId[that.categoryId.length] = result.data.categoryId;
                 },
                 error: function(message) {
                     console.log("error")
@@ -135,7 +139,7 @@ Vue.component('productList',{
 	    	var reqbody = {
 	    		
     			// 'username':store.state.userId,
-			    "userId": "123456",
+			    //"userId": "123456",
 			    "categoryId": this.categoryId[index],
 			    "categoryName": this.updates,
 			    "categoryType": index
@@ -147,10 +151,11 @@ Vue.component('productList',{
             that.updates = ''
             $.ajax({
                 type: "POST",
-                // url: "https://www.e-order.cn:8080/eorder/seller/category/list",
-                url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
-                contentType: "application/json",
-                data: JSON.stringify(reqbody),
+                url: "http://www.e-order.cn:8080/eorder/seller/category/update",
+                //url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                xhrFields: {withCredentials: true},
                 dataType : 'json', 
                 success: function(result) {
                     console.log("修改类目成功")
