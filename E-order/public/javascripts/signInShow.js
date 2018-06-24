@@ -52,13 +52,19 @@ Vue.component('signinshow', {
 					$.ajax({
 		                type: "POST",
 		                url: "http://www.e-order.cn:8080/eorder/seller/signin",
+		                xhrFields: {withCredentials: true},
 		                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
 		                contentType: "application/x-www-form-urlencoded",
 		                data: Qs.stringify(reqbody),
 		                dataType : 'json', 
 		                success: function(result) {
-		                	store.commit('UpdateUserId', result.sellerId)
-		                    router.push({ path: '/manageIndex' })
+		                	//console.log(result);
+		                	if (result.code == 0) {
+		                		store.commit('UpdateUserId', result.sellerId);
+		                    	router.push({ path: '/manageIndex' });
+		                	} else {
+		                		alert(result.msg);
+		                	}
 		                },
 		                error: function(message) {
 		                    console.log("error")

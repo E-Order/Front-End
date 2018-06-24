@@ -5,6 +5,7 @@ Vue.component('editProducts',{
 	        length: 0,
 	        cur_page: 1,
 	        page_size: 10,
+            total: 0,
 	        url : 'http://www.e-order.cn:8080/eorder/seller/product/list',
 	        ToChangeproductStatus: false,
 	        idx: 0,
@@ -43,12 +44,13 @@ Vue.component('editProducts',{
         getData() {
         	axios.defaults.withCredentials = true;
             axios.get(this.url, {params:{
-                page: this.cur_page,
+                page: this.cur_page-1,
                 size: this.page_size,
                 categoryType: this.$route.params.type
             }}).then((res) => {
-            	console.log(res);
+            	//console.log(res);
                 this.tableData = res.data.data;
+                this.total = res.data.total;
                 this.productids = new Array()
                 this.isEditting = new Array()
                 for (var i = 0; i < this.tableData.length; i++) {
@@ -92,6 +94,7 @@ Vue.component('editProducts',{
             $.ajax({
                 type: "POST",
                 url: onSaleurl,
+                xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
                 contentType: "application/x-www-form-urlencoded",
                 data: Qs.stringify(reqbody),
@@ -133,6 +136,7 @@ Vue.component('editProducts',{
             $.ajax({
                 type: "POST",
                 url: offSaleurl,
+                xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
                 contentType: "application/x-www-form-urlencoded",
                 data: Qs.stringify(reqbody),
@@ -182,6 +186,7 @@ Vue.component('editProducts',{
             // }).catch((error) => {
             //     console.log(error);
             // });
+            var that = this;
             reqbody = {
             	productId: row.productId,
                 productName: this.form.pname,
@@ -195,12 +200,14 @@ Vue.component('editProducts',{
             $.ajax({
                 type: "POST",
                 url: modifiedurl,
+                xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
                 contentType: "application/x-www-form-urlencoded",
                 data: Qs.stringify(reqbody),
                 dataType : 'json', 
                 success: function(result) {
-                	console.log("modify success")
+                	//console.log("modify success");
+                    that.getData();
                 },
                 error: function(message) {
                     console.log("error")
@@ -426,7 +433,7 @@ Vue.component('editProducts',{
 		            :page-sizes="[10, 20, 30, 40]"
 		            :page-size="10"
 		            layout="total, sizes, prev, pager, next, jumper"
-		            :total="40">
+		            :total="total">
 		        </el-pagination>
 		    </div>
     	</div>

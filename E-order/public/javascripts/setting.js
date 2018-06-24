@@ -78,7 +78,7 @@ Vue.component('settings',{
                 xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/info",
                 success: function(result) {
-                	console.log(result);
+                	//console.log(result);
                     that.userdata = result.data;
                     
                     that.loading = false;
@@ -140,16 +140,17 @@ Vue.component('settings',{
 	    	this.commitModification()
 	    },
 	    commitModification() {
+	    	var that = this;
 	    	$.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/category/list",
+                url: "http://www.e-order.cn:8080/eorder/seller/update",
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/update",
                 contentType: "application/x-www-form-urlencoded",
                 xhrFields: {withCredentials: true},
                 data: Qs.stringify(this.userdata),
                 dataType : 'json',
                 success: function(result) {
-                    console.log("success")
+                    that.$message.success('成功');
                 },
                 error: function(message) {
                     console.log("error")

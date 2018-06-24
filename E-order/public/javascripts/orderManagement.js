@@ -70,6 +70,7 @@ Vue.component('orderList',{
     },
     methods: {
     	Format(dd, fmt) { //author: meizz 
+    		if(dd === "") return dd;
     		var date = new Date(dd);
 		    var o = {
 		        "M+": date.getMonth() + 1, //月份 
@@ -89,23 +90,26 @@ Vue.component('orderList',{
              axios.get("http://www.e-order.cn:8080/eorder/seller/order/detail", {params:{
                 orderId: this.tableData[i].orderId
             }}).then((res) => {
-                Vue.set(this.tableData[i],'orderDetailList',res.data.data.orderDetailList);
+            	//console.log(res);
+                Vue.set(this.tableData[i],'orderDetailList',res.data.data.orderDetailVOList);
+                //console.log(this.tableData[i]);
             }).catch((error) => {
                 console.log(error);
             });
         },
         getData() {
         	axios.defaults.withCredentials = true;
+        	//console.log(this.searchCriteria.orderDate);
             axios.get(this.url, {params:{
             	orderId: this.searchCriteria.orderId,
             	deskId: this.searchCriteria.deskId,
             	orderStatus: this.searchCriteria.orderStatus,
             	payStatus: this.searchCriteria.payStatus,
             	orderDate: this.searchCriteria.orderDate,
-                page: this.cur_page,
+                page: this.cur_page-1,
                 size: this.page_size
             }}).then((res) => {
-            	console.log(res);
+            	//console.log(res);
                 this.tableData = res.data.data;
                 this.orderNum = res.data.total;
                 for (var i = 0; i < this.tableData.length; i++) {
@@ -148,18 +152,39 @@ Vue.component('orderList',{
             this.Todelete = true;
         },
         deleteOrder() {
-            axios.post("http://www.e-order.cn:8080/eorder/seller/order/cancel",
-                {
-                    orderId: this.tableData[this.idx].orderId
+            // axios.post("http://www.e-order.cn:8080/eorder/seller/order/cancel",
+            //     {
+            //         orderId: this.tableData[this.idx].orderId
+            //     }
+            // ).then((res) => {
+            //     //console.log(res);
+            //     // this.tableData.splice(this.idx, 1);
+                // this.tableData[this.idx].orderStatus = 2;
+                // this.$message.success('成功');
+                // this.Todelete = false;
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            var that = this;
+            reqbody = {
+            	orderId: this.tableData[this.idx].orderId
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://www.e-order.cn:8080/eorder/seller/order/cancel",
+                xhrFields: {withCredentials: true},
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+	                that.tableData[that.idx].orderStatus = 2;
+	                that.$message.success('成功');
+	                that.Todelete = false;
+                },
+                error: function(message) {
+                    console.log("error")
                 }
-            ).then((res) => {
-                //console.log(res);
-                // this.tableData.splice(this.idx, 1);
-                this.tableData[this.idx].orderStatus = 2;
-                this.$message.success('成功');
-                this.Todelete = false;
-            }).catch((error) => {
-                console.log(error);
             });
         },
         handleFinish(index, row) {
@@ -167,15 +192,35 @@ Vue.component('orderList',{
             this.Tofinish = true;
         },
         finishOrder() {
-            axios.post("http://www.e-order.cn:8080/eorder/seller/order/finish",
-                {
-                    orderId: this.tableData[this.idx].orderId
+            // axios.post("http://www.e-order.cn:8080/eorder/seller/order/finish",
+            //     {
+            //         orderId: this.tableData[this.idx].orderId
+            //     }
+            // ).then((res) => {
+            //     this.tableData[this.idx].orderStatus = 1;
+            //     this.Tofinish = false;
+            // }).catch((error) => {
+            //     console.log(error);
+            // });
+            var that = this;
+            reqbody = {
+            	orderId: this.tableData[this.idx].orderId
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://www.e-order.cn:8080/eorder/seller/order/finish",
+                xhrFields: {withCredentials: true},
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+	                that.tableData[that.idx].orderStatus = 1;
+                	that.Tofinish = false;
+                },
+                error: function(message) {
+                    console.log("error")
                 }
-            ).then((res) => {
-                this.tableData[this.idx].orderStatus = 1;
-                this.Tofinish = false;
-            }).catch((error) => {
-                console.log(error);
             });
         },
         handleCurrentChange(val) {
@@ -197,6 +242,9 @@ Vue.component('orderList',{
 	    Search() {
 	    	this.cur_page = 1;
 	    	this.searchCriteria = this.criteria;
+	    	if (this.criteria.orderDate === null) {
+	    		this.searchCriteria.orderDate = "";
+	    	}
 	    	this.getData();
 	    },
 	    reSetSearch() {
@@ -236,7 +284,8 @@ Vue.component('orderList',{
 		  <el-date-picker
 		      v-model="criteria.orderDate"
 		      type="date"
-		      placeholder="选择日期">
+		      placeholder="选择日期"
+		      value-format="yyyy-MM-dd">
 		  </el-date-picker>
 		  支付状态：
 		  <el-select v-model="criteria.payStatus" placeholder="请选择支付状态">

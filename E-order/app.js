@@ -23,7 +23,7 @@ app.use(express.static(__dirname + '/public/javascripts'));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.listen(8080);
+app.listen(80);
 
 
 // catch 404 and forward to error handler
