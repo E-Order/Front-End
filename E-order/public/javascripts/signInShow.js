@@ -9,7 +9,7 @@ Vue.component('signinshow', {
 		    		return callback(new Error('用户名要以字母开头，由6-18字母和数字组成'));
 		    	} else{
 		    		callback();
-		    	} 
+		    	}
 		    }
 		};
 		var validatePass = (rule, value, callback) => {
@@ -42,7 +42,7 @@ Vue.component('signinshow', {
     methods: {
         submitForm(formName) {
         	var user = this.$refs[formName].model.username;
-		    var pass = this.$refs[formName].model.pass;
+		        var pass = md5(this.$refs[formName].model.pass);
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 	            	var reqbody = {
@@ -56,11 +56,10 @@ Vue.component('signinshow', {
 		                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
 		                contentType: "application/x-www-form-urlencoded",
 		                data: Qs.stringify(reqbody),
-		                dataType : 'json', 
+		                dataType : 'json',
 		                success: function(result) {
-		                	//console.log(result);
 		                	if (result.code == 0) {
-		                		store.commit('UpdateUserId', result.sellerId);
+		                		  store.commit('UpdateUserId', result.sellerId);
 		                    	router.push({ path: '/manageIndex' });
 		                	} else {
 		                		alert(result.msg);
@@ -80,8 +79,8 @@ Vue.component('signinshow', {
         	this.$refs[formName].resetFields();
         }
     },
-  
-  
+
+
     template: `
 	    <div id="SignInTable">
 	    	<img id="peo" src="../images/people.png">
