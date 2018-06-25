@@ -86,7 +86,7 @@ Vue.component('signupshow', {
     methods: {
         submitForm(formName) {
 	      	var user = this.$refs[formName].model.username;
-	      	var pass = this.$refs[formName].model.pass;
+	      	var pass = md5(this.$refs[formName].model.pass);
 	      	var tel = this.$refs[formName].model.tel;
 	      	var addr = this.$refs[formName].model.addr;
 	        this.$refs[formName].validate((valid) => {

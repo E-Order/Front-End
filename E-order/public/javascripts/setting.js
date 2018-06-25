@@ -135,7 +135,7 @@ Vue.component('settings',{
 	    submitEditting() {
 	    	this.isFinishEditPassword = false
 	    	var temp = this.userdata
-	    	temp.password = this.ruleForm2.pass
+	    	temp.password = md5(this.ruleForm2.pass);
 	    	this.userdata = temp
 	    	this.commitModification()
 	    },

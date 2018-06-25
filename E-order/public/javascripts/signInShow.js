@@ -42,7 +42,7 @@ Vue.component('signinshow', {
     methods: {
         submitForm(formName) {
         	var user = this.$refs[formName].model.username;
-		    var pass = this.$refs[formName].model.pass;
+		    var pass = md5(this.$refs[formName].model.pass);
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 	            	var reqbody = {

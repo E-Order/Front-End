@@ -409,7 +409,7 @@ Vue.component('orderList',{
 	      <template slot-scope="scope">
 	        <el-button
 	          size="mini"
-	          :disabled="scope.row.payStatus === 1"
+	          :disabled="scope.row.payStatus === 1 || scope.row.orderStatus === 2"
 	          @click="handlePay(scope.$index, scope.row)">已支付</el-button>
 	        <el-button
 	          size="mini"
