@@ -6,7 +6,7 @@ Vue.component('editProducts',{
 	        cur_page: 1,
 	        page_size: 10,
             total: 0,
-	        url : 'http://www.e-order.cn:8080/eorder/seller/product/list',
+	        url : 'http://123.207.7.251:8080/eorder/seller/product/list',
 	        ToChangeproductStatus: false,
 	        idx: 0,
 	        productIds: null,
@@ -80,7 +80,7 @@ Vue.component('editProducts',{
             this.setIndex(row)
             this.ToChangeproductStatus = true;
             this.changeproductStatus()
-            onSaleurl = 'http://www.e-order.cn:8080/eorder/seller/product/onSale'
+            onSaleurl = 'http://123.207.7.251:8080/eorder/seller/product/onSale'
             // axios.post(onSaleurl, {
             //     productId: row.productId
             // }).then((res) => {
@@ -121,7 +121,7 @@ Vue.component('editProducts',{
 
             this.ToChangeproductStatus = true;
             this.changeproductStatus()
-            offSaleurl = 'http://www.e-order.cn:8080/eorder/seller/product/offSale'
+            offSaleurl = 'http://123.207.7.251:8080/eorder/seller/product/offSale'
 
             // axios.post(offSaleurl, {params:{
             //     productId: row.productId
@@ -169,7 +169,7 @@ Vue.component('editProducts',{
         },
         submitEditting(form,row) {
         	Vue.set(this.isEditting, row.initialIndex, false)
-        	modifiedurl = 'http://www.e-order.cn:8080/eorder/seller/product/update'
+        	modifiedurl = 'http://123.207.7.251:8080/eorder/seller/product/update'
         	var offsales = 1;
         	if (!this.form.offsale) offsales = 0
             // axios.post(modifiedurl, {params:{
@@ -217,7 +217,7 @@ Vue.component('editProducts',{
         },
         submitAddition() {
         	this.isAdd=false
-        	addurl = 'http://www.e-order.cn:8080/eorder/seller/product/add'
+        	addurl = 'http://123.207.7.251:8080/eorder/seller/product/add'
         	var offsales = 1;
         	if (!this.form.offsale) offsales = 0
             // axios.post(addurl, {params:{

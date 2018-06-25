@@ -1,4 +1,3 @@
-
 const Sgnin= { template: '<signinshow></signinshow>' }
 const Sgnup = { template: '<signupshow></signupshow>' }
 const con = { template: '<contactshow></contactshow>' }
@@ -8,7 +7,6 @@ const order = { template: '<orderList></orderList>' }
 const product = { template: '<productList></productList>' }
 const settings = { template: '<settings></settings>' }
 const editProduct = { template: '<editProducts></editProducts>' }
-const manageIndexpage = { template: '<manageIndex></manageIndex>' }
 
 
 const router = new VueRouter({
@@ -59,7 +57,7 @@ const router = new VueRouter({
       path: '/manageIndex',
       components: {
         naviBar: afterNavi,
-        mainContent: manageIndexpage
+        mainContent: settings
       }
     },
     {

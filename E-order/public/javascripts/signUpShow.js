@@ -9,7 +9,7 @@ Vue.component('signupshow', {
 		    		return callback(new Error('用户名要以字母开头，由6-18字母和数字组成'));
 		    	} else{
 		    		callback();
-		    	}
+		    	} 
 		    }
 		};
 		var validatePass = (rule, value, callback) => {
@@ -25,7 +25,7 @@ Vue.component('signupshow', {
 		        } else {
 		      	    callback();
 		        }
-
+		      
 		    }
 		};
 		var validatePass2 = (rule, value, callback) => {
@@ -86,25 +86,25 @@ Vue.component('signupshow', {
     methods: {
         submitForm(formName) {
 	      	var user = this.$refs[formName].model.username;
-	      	var pass = md5(this.$refs[formName].model.pass);
+	      	var pass = this.$refs[formName].model.pass;
 	      	var tel = this.$refs[formName].model.tel;
 	      	var addr = this.$refs[formName].model.addr;
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 		          	var reqbody = {
-      					    username: user,
-      					    password: pass,
-      					    telephone: tel,
-      					    address: addr
-      					};
+					    username: user,
+					    password: pass,
+					    telephone: tel,
+					    address: addr
+					};
 
 		          	$.ajax({
 		                type: "POST",
-		                url: "http://www.e-order.cn:8080/eorder/seller/signup",
+		                url: "http://123.207.7.251:8080/eorder/seller/signup",
 		                //url: "https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signup",
 		                contentType: "application/x-www-form-urlencoded",
 		                data: Qs.stringify(reqbody),
-		                dataType : 'json',
+		                dataType : 'json', 
 		                success: function(result) {
 		                    router.push({ path: '/signin' })
 		                },
@@ -112,6 +112,17 @@ Vue.component('signupshow', {
 		                    console.log("error")
 		                }
 		            });
+
+		       //      axios.post("http://123.:8080/eorder/seller/signup", {
+		       //          username: user,
+					    // password: pass,
+					    // telephone: tel,
+					    // address: addr
+		       //      }).then((res) => {
+		       //          router.push({ path: '/signin' })
+		       //      }).catch((error) => {
+		       //          console.log(error);
+		       //      });
 	            } else {
 	            	console.log('error submit!!');
 	            	return false;
@@ -122,6 +133,8 @@ Vue.component('signupshow', {
         	this.$refs[formName].resetFields();
         }
     },
+  
+  
     template: `
 	    <div id="SignUpTable">
 			<img id="peo" src="../images/people.png">

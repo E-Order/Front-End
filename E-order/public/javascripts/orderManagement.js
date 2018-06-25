@@ -56,7 +56,7 @@ Vue.component('orderList',{
         length: 0,
         cur_page: 1,
         page_size: 10,
-        url : 'http://www.e-order.cn:8080/eorder/seller/order/list',
+        url : 'http://123.207.7.251:8080/eorder/seller/order/list',
         ToChangepayStatus: false,
         idx: -1,
         Todelete: false,
@@ -87,7 +87,7 @@ Vue.component('orderList',{
 		    return fmt;
 		},
         getDetail(i) {
-             axios.get("http://www.e-order.cn:8080/eorder/seller/order/detail", {params:{
+             axios.get("http://123.207.7.251:8080/eorder/seller/order/detail", {params:{
                 orderId: this.tableData[i].orderId
             }}).then((res) => {
             	//console.log(res);
@@ -114,7 +114,7 @@ Vue.component('orderList',{
                 this.orderNum = res.data.total;
                 for (var i = 0; i < this.tableData.length; i++) {
                 	Vue.set(this.tableData[i],'index',i);
-                	d = this.Format(this.tableData[i].updateTime,"yyyy-MM-dd");
+                	d = this.Format(this.tableData[i].createTime*1000,"yyyy-MM-dd");
                 	Vue.set(this.tableData[i],'date',d);
                     this.getDetail(i);
                 }
@@ -123,7 +123,7 @@ Vue.component('orderList',{
             });
         },
         // showDetail(index, row){
-        //     axios.get("http://www.e-order.cn:8080/eorder/seller/order/detail", {params:{
+        //     axios.get("http://123.207.7.251:8080/eorder/seller/order/detail", {params:{
         //         orderId: row.orderId
         //     }}).then((res) => {
         //         this.tableData[index] = Object.assign({}, res.data.data);
@@ -144,15 +144,33 @@ Vue.component('orderList',{
             this.ToChangepayStatus = true;
         },
         changepayStatus() {
-            this.tableData[this.idx].payStatus = 1;
-            this.ToChangepayStatus = false;
+        	var that = this;
+            reqbody = {
+            	orderId: this.tableData[this.idx].orderId
+            }
+            $.ajax({
+                type: "POST",
+                url: "http://123.207.7.251:8080/eorder/seller/order/pay",
+                xhrFields: {withCredentials: true},
+                //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/pay",
+                contentType: "application/x-www-form-urlencoded",
+                data: Qs.stringify(reqbody),
+                dataType : 'json', 
+                success: function(result) {
+	                that.tableData[that.idx].payStatus = 1;
+            		that.ToChangepayStatus = false;
+                },
+                error: function(message) {
+                    console.log("error")
+                }
+            });
         },
         handleDelete(index, row) {
             this.idx = row.index;
             this.Todelete = true;
         },
         deleteOrder() {
-            // axios.post("http://www.e-order.cn:8080/eorder/seller/order/cancel",
+            // axios.post("http://123.207.7.251:8080/eorder/seller/order/cancel",
             //     {
             //         orderId: this.tableData[this.idx].orderId
             //     }
@@ -171,7 +189,7 @@ Vue.component('orderList',{
             }
             $.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/order/cancel",
+                url: "http://123.207.7.251:8080/eorder/seller/order/cancel",
                 xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
                 contentType: "application/x-www-form-urlencoded",
@@ -192,7 +210,7 @@ Vue.component('orderList',{
             this.Tofinish = true;
         },
         finishOrder() {
-            // axios.post("http://www.e-order.cn:8080/eorder/seller/order/finish",
+            // axios.post("http://123.207.7.251:8080/eorder/seller/order/finish",
             //     {
             //         orderId: this.tableData[this.idx].orderId
             //     }
@@ -208,7 +226,7 @@ Vue.component('orderList',{
             }
             $.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/order/finish",
+                url: "http://123.207.7.251:8080/eorder/seller/order/finish",
                 xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/signin",
                 contentType: "application/x-www-form-urlencoded",

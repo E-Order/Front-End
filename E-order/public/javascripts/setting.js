@@ -74,7 +74,7 @@ Vue.component('settings',{
 			var that=this;
 			$.ajax({
                 type: "GET",
-                url: "http://www.e-order.cn:8080/eorder/seller/info",
+                url: "http://123.207.7.251:8080/eorder/seller/info",
                 xhrFields: {withCredentials: true},
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/info",
                 success: function(result) {
@@ -143,7 +143,7 @@ Vue.component('settings',{
 	    	var that = this;
 	    	$.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/update",
+                url: "http://123.207.7.251:8080/eorder/seller/update",
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/update",
                 contentType: "application/x-www-form-urlencoded",
                 xhrFields: {withCredentials: true},

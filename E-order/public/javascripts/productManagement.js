@@ -30,7 +30,7 @@ Vue.component('productList',{
 			var that=this;
 			$.ajax({
                 type: "GET",
-                 url: "http://www.e-order.cn:8080/eorder/seller/category/list",
+                 url: "http://123.207.7.251:8080/eorder/seller/category/list",
                 //url:"https://private-5e210-ordermeal.apiary-mock.com/eorder/seller/category/list",
                 //contentType: "application/json",
                 //data: JSON.stringify(reqbody),
@@ -77,7 +77,7 @@ Vue.component('productList',{
 			that.types.splice(index, 1)
 			$.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/category/delete",
+                url: "http://123.207.7.251:8080/eorder/seller/category/delete",
                 //url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/delete",
                 contentType: "application/x-www-form-urlencoded",
                 xhrFields: {withCredentials: true},
@@ -111,7 +111,7 @@ Vue.component('productList',{
             that.inputs = ''
 			$.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/category/add",
+                url: "http://123.207.7.251:8080/eorder/seller/category/add",
                 //url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
                 contentType: "application/x-www-form-urlencoded",
                 xhrFields: {withCredentials: true},
@@ -151,7 +151,7 @@ Vue.component('productList',{
             that.updates = ''
             $.ajax({
                 type: "POST",
-                url: "http://www.e-order.cn:8080/eorder/seller/category/update",
+                url: "http://123.207.7.251:8080/eorder/seller/category/update",
                 //url:"https://private-f835d-ordermeal.apiary-mock.com//eorder/seller/category/add",
                 contentType: "application/x-www-form-urlencoded",
                 data: Qs.stringify(reqbody),
