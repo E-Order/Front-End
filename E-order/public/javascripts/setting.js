@@ -156,6 +156,9 @@ Vue.component('settings',{
                     console.log("error")
                 }
             });
+	    },
+	    clearContent() {
+			this.$refs['ruleForm2'].resetFields();
 	    }
 	},
 	template: `
@@ -197,6 +200,7 @@ Vue.component('settings',{
 							  	transition
 							  	trigger="click"
 							  	v-model="isFinishEditPassword"
+							  	@show="clearContent"
 						>
 							<el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px" class="demo-ruleForm">
 								<el-form-item label="旧密码" prop="oldpass">
