@@ -25,7 +25,7 @@ Vue.component('editProducts',{
 	        addform: {
 	        	pname: '',
 		        price: '',
-		        stock: '',
+		        stock: '10000',
 		        desc: '',
 		        offsale: 0,
 		        plink: ''
@@ -260,7 +260,7 @@ Vue.component('editProducts',{
             });
             this.addform.pname = ''
 		    this.addform.price = ''
-		    this.addform.stock = ''
+		    this.addform.stock = '10000'
 		    this.addform.desc = ''
 		    this.addform.offsale = 0
 		    this.addform.plink = ''
@@ -416,7 +416,7 @@ Vue.component('editProducts',{
 							</el-form>
 						    <el-button
 					          	size="mini"
-					          	type="danger"
+					          	type="primary"
 					          	slot="reference"
 					          	@click="handleEditProduct(scope.$index, scope.row)">编辑菜品信息</el-button>
 
