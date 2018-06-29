@@ -332,7 +332,7 @@ Vue.component('orderList',{
 	          @click="reSetSearch">重置</el-button>
 		</div>
 	    <el-table
-	    :data="tableData.slice((cur_page-1)*page_size,cur_page*page_size)"
+	    :data="tableData"
 	    @filter-change="handleFilterChange"
 	    style="width: 100%">
 	    <el-table-column
