@@ -27,7 +27,7 @@ Vue.component('settings',{
 	    var validateOldpass = (rule, value, callback) => {
 	    	if (value === '') {
 	          	callback(new Error('请再次输入旧密码'));
-	        } else if (value !== this.userdata.password) {
+	        } else if (value !== hex_md5(this.userdata.password)) {
 	          	callback(new Error('旧密码输入错误!'));
 	        } else {
 	          	callback();
@@ -79,9 +79,14 @@ Vue.component('settings',{
                 //url:"https://private-f835d-ordermeal.apiary-mock.com/eorder/seller/info",
                 success: function(result) {
                 	//console.log(result);
-                    that.userdata = result.data;
+                	if (result.code != 0) {
+                    	router.push({ path: '/signin' });
+                    } else {
+                    	that.userdata = result.data;
                     
-                    that.loading = false;
+                    	that.loading = false;
+                    }
+                    
                 },
                 error: function(message) {
                     console.log("error")
@@ -91,7 +96,7 @@ Vue.component('settings',{
 	    },
 	    editUsername() {
 	    	if (this.username === '') {
-	    		alert("用户名不能为空")
+	    		this.isEditUsername = false
 	    		return
 	    	}
 	    	var RegUserName = /^[a-zA-Z]+[a-zA-Z0-9_]{5,17}$/;
@@ -107,7 +112,7 @@ Vue.component('settings',{
 	    },
 	    editPhone() {
 	    	if (this.phone === '') {
-	    		alert("联系方式不能为空")
+	    		this.isEditPhone = false
 	    		return
 	    	}
 	    	var RegTel = /^1[0-9]{10}$/;
@@ -123,7 +128,7 @@ Vue.component('settings',{
 	    },
 	    editAddress() {
 	    	if (this.addr === '') {
-	    		alert("餐厅地址不能为空")
+	    		this.isEditAddress = false
 	    		return
 	    	}
 	    	var temp = this.userdata
@@ -135,7 +140,7 @@ Vue.component('settings',{
 	    submitEditting() {
 	    	this.isFinishEditPassword = false
 	    	var temp = this.userdata
-	    	temp.password = md5(this.ruleForm2.pass);
+	    	temp.password = hex_md5(this.ruleForm2.pass);
 	    	this.userdata = temp
 	    	this.commitModification()
 	    },

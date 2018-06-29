@@ -42,7 +42,7 @@ Vue.component('signinshow', {
     methods: {
         submitForm(formName) {
         	var user = this.$refs[formName].model.username;
-		    var pass = md5(this.$refs[formName].model.pass);
+		    var pass = hex_md5(this.$refs[formName].model.pass);
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 	            	var reqbody = {
@@ -61,7 +61,7 @@ Vue.component('signinshow', {
 		                	//console.log(result);
 		                	if (result.code == 0) {
 		                		store.commit('UpdateUserId', result.sellerId);
-		                    	router.push({ path: '/manageIndex' });
+		                    	router.push({ path: '/manageSetting' });
 		                	} else {
 		                		alert(result.msg);
 		                	}

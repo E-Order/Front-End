@@ -7,65 +7,64 @@ const order = { template: '<orderList></orderList>' }
 const product = { template: '<productList></productList>' }
 const settings = { template: '<settings></settings>' }
 const editProduct = { template: '<editProducts></editProducts>' }
-const manageIndex = { template: '<manageIndex></manageIndex>' }
-
+const msg = { template: '<message></message>' }
 
 const router = new VueRouter({
   routes: [
     {
       path: '/',
       components: {
-        naviBar: beforeNavi,
-        mainContent: Sgnin
+        naviBar: afterNavi,
+        mainContent: settings,
+        messages:msg
       }
     },
     {
       path: '/signin',
       components: {
         naviBar: beforeNavi,
-        mainContent: Sgnin
+        mainContent: Sgnin,
+        messages:msg
       }
     },
     {
       path: '/signup',
       components: {
         naviBar: beforeNavi,
-        mainContent: Sgnup
+        mainContent: Sgnup,
+        messages:msg
       }
     },
     {
       path: '/contact',
       components: {
         naviBar: beforeNavi,
-        mainContent: con
+        mainContent: con,
+        messages:msg
       }
     },
     {
       path: '/manageOrder',
       components: {
         naviBar: afterNavi,
-        mainContent: order
+        mainContent: order,
+        messages: msg
       }
     },
     {
       path: '/manageProduct',
       components: {
         naviBar: afterNavi,
-        mainContent: product
-      }
-    },
-    {
-      path: '/manageIndex',
-      components: {
-        naviBar: afterNavi,
-        mainContent: manageIndex
+        mainContent: product,
+        messages: msg
       }
     },
     {
       path: '/manageSetting',
       components: {
         naviBar: afterNavi,
-        mainContent: settings
+        mainContent: settings,
+        messages: msg
       }
     },
     {
@@ -73,7 +72,8 @@ const router = new VueRouter({
       name: 'editProducts',
       components: {
         naviBar: afterNavi,
-        mainContent: editProduct
+        mainContent: editProduct,
+        messages: msg
       }
     }
   ]

@@ -3,7 +3,6 @@ Vue.component('beforeNavi',{
 		<el-row class="tac">
 			<el-col>
 		    <el-menu
-		      default-active="2"
 		      class="el-menus"
 		      background-color="#4F4F4F"
 		      text-color="#fff"
