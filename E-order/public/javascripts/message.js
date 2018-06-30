@@ -50,7 +50,9 @@ Vue.component('message',{
 	    leaveClose() {
 	    	var that = this
 	    	if (document.cookie != "") {
-	    		that.ws.onclose = function() {}
+	    		if (that.ws != null) {
+	    			that.ws.onclose = function() {}
+	    		}
 	    	}
 	    }
 	},

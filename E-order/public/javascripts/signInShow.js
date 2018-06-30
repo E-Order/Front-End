@@ -43,6 +43,7 @@ Vue.component('signinshow', {
         submitForm(formName) {
         	var user = this.$refs[formName].model.username;
 		    var pass = hex_md5(this.$refs[formName].model.pass);
+		    var that = this
 	        this.$refs[formName].validate((valid) => {
 	            if (valid) {
 	            	var reqbody = {
@@ -71,7 +72,7 @@ Vue.component('signinshow', {
 		                }
 		            });
 	            } else {
-		            console.log('error submit!!');
+		            that.$message('提交信息有误请修改后提交');
 		            return false;
 	            }
 	        });

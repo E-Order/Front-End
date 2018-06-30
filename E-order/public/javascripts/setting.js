@@ -138,11 +138,18 @@ Vue.component('settings',{
 	    	this.isEditAddress = false
 	    },
 	    submitEditting() {
-	    	this.isFinishEditPassword = false
-	    	var temp = this.userdata
-	    	temp.password = hex_md5(this.ruleForm2.pass);
-	    	this.userdata = temp
-	    	this.commitModification()
+	    	this.$refs['ruleForm2'].validate((valid) => {
+	    		if (valid) {
+	    			this.isFinishEditPassword = false
+			    	var temp = this.userdata
+			    	temp.password = hex_md5(this.ruleForm2.pass);
+			    	this.userdata = temp
+			    	this.commitModification()
+	    		} else {
+		    		this.$message("密码修改不成功！")
+		    	}
+		    }); 
+	    	
 	    },
 	    commitModification() {
 	    	var that = this;
