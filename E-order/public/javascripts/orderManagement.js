@@ -1,36 +1,7 @@
-Vue.component('orderList',{
+Vue.component('OrderList',{
 
    data() {
       return {
-        // tableData: [{
-        //   id: 1,
-        //   deskId: 1,
-        //   date: '2016-05-02',
-        //   orderAmount: '300',
-        //   payStatus: '已支付',
-        //   orderStatus: '进行中'
-        // }, {
-        //   id: '2',
-        //   deskId: '2',
-        //   date: '2016-05-04',
-        //   orderAmount: '300',
-        //   payStatus: '未支付',
-        //   orderStatus: '进行中'
-        // }, {
-        //   id: '3',
-        //   deskId: '3',
-        //   date: '2016-05-01',
-        //   orderAmount: '300',
-        //   payStatus: '已支付',
-        //   orderStatus: '已完结'
-        // }, {
-        //   id: '4',
-        //   deskId: '4',
-        //   date: '2016-05-03',
-        //   orderAmount: '300',
-        //   payStatus: '未支付',
-        //   orderStatus: '已取消'
-        // }],
         tableData: [],
         criteria: {
           orderId: "",

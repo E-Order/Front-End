@@ -1,4 +1,4 @@
-Vue.component('beforeNavi',{
+Vue.component('BeforeNavigation',{
 	template: `
 		<el-row class="tac">
 			<el-col>

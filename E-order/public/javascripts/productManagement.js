@@ -1,4 +1,4 @@
-Vue.component('productList',{
+Vue.component('ProductList',{
 	data () {
 		return {
 			types:null,

@@ -1,79 +1,79 @@
-const Sgnin= { template: '<signinshow></signinshow>' }
-const Sgnup = { template: '<signupshow></signupshow>' }
-const con = { template: '<contactshow></contactshow>' }
-const afterNavi = { template: '<afterNavi></afterNavi>' }
-const beforeNavi = { template: '<beforeNavi></beforeNavi>' }
-const order = { template: '<orderList></orderList>' }
-const product = { template: '<productList></productList>' }
-const settings = { template: '<settings></settings>' }
-const editProduct = { template: '<editProducts></editProducts>' }
-const msg = { template: '<message></message>' }
+const Sgnin= { template: '<SignInShow></SignInShow>' }
+const Sgnup = { template: '<SignUpShow></SignUpShow>' }
+const con = { template: '<ContactShow></ContactShow>' }
+const afterNavi = { template: '<AfterNavigation></AfterNavigation>' }
+const beforeNavi = { template: '<BeforeNavigation></BeforeNavigation>' }
+const order = { template: '<OrderList></OrderList>' }
+const product = { template: '<ProductList></ProductList>' }
+const settings = { template: '<Settings></Settings>' }
+const editProduct = { template: '<EditProducts></EditProducts>' }
+const msg = { template: '<Message></Message>' }
 
 const router = new VueRouter({
   routes: [
     {
       path: '/',
       components: {
-        naviBar: afterNavi,
-        mainContent: settings,
-        messages:msg
+        NavigationBar: afterNavi,
+        MainContent: settings,
+        Messages:msg
       }
     },
     {
       path: '/signin',
       components: {
-        naviBar: beforeNavi,
-        mainContent: Sgnin,
-        messages:msg
+        NavigationBar: beforeNavi,
+        MainContent: Sgnin,
+        Messages:msg
       }
     },
     {
       path: '/signup',
       components: {
-        naviBar: beforeNavi,
-        mainContent: Sgnup,
-        messages:msg
+        NavigationBar: beforeNavi,
+        MainContent: Sgnup,
+        Messages:msg
       }
     },
     {
       path: '/contact',
       components: {
-        naviBar: beforeNavi,
-        mainContent: con,
-        messages:msg
+        NavigationBar: beforeNavi,
+        MainContent: con,
+        Messages:msg
       }
     },
     {
       path: '/manageOrder',
       components: {
-        naviBar: afterNavi,
-        mainContent: order,
-        messages: msg
+        NavigationBar: afterNavi,
+        MainContent: order,
+        Messages: msg
       }
     },
     {
       path: '/manageProduct',
       components: {
-        naviBar: afterNavi,
-        mainContent: product,
-        messages: msg
+        NavigationBar: afterNavi,
+        MainContent: product,
+        Messages: msg
       }
     },
     {
       path: '/manageSetting',
       components: {
-        naviBar: afterNavi,
-        mainContent: settings,
-        messages: msg
+        NavigationBar: afterNavi,
+        MainContent: settings,
+        Messages: msg
       }
     },
     {
       path: '/manageProduct/category/:type/:name',
       name: 'editProducts',
       components: {
-        naviBar: afterNavi,
-        mainContent: editProduct,
-        messages: msg
+        NavigationBar: afterNavi,
+        MainContent: editProduct,
+        Messages: msg
       }
     }
   ]

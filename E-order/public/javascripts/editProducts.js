@@ -1,4 +1,4 @@
-Vue.component('editProducts',{
+Vue.component('EditProducts',{
 	data () {
 		return {
 			tableData: [],

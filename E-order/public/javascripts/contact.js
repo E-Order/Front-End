@@ -1,4 +1,4 @@
-Vue.component('contactshow',{
+Vue.component('ContactShow',{
 	template: `
 		<div id="contactView">
 			<div>

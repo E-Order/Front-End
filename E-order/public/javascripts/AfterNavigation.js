@@ -1,4 +1,4 @@
-Vue.component('afterNavi',{
+Vue.component('AfterNavigation',{
 	methods: {
 		signOut() {
 			$.ajax({

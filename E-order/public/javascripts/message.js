@@ -1,4 +1,4 @@
-Vue.component('message',{
+Vue.component('Message',{
 	data () {
 		return {
 			ws:null,

@@ -1,4 +1,4 @@
-Vue.component('settings',{
+Vue.component('Settings',{
 	data () {
 		var validatePass = (rule, value, callback) => {
 	        if (value === '') {

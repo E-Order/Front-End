@@ -1,4 +1,4 @@
-Vue.component('signupshow', {
+Vue.component('SignUpShow', {
     data:function() {
 	    var checkUsername = (rule, value, callback) => {
 		    if (!value) {
