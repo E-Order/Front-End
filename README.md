@@ -6,3 +6,7 @@ E-order Front End
 可登陆 http://123.207.7.251 使用
 
 使用nodejs部署
+
+demo
+
+![](https://github.com/E-Order/Front-End/blob/master/%E5%95%86%E5%AE%B6%E7%AB%AFdemo.gif)
