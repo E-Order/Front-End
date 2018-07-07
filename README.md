@@ -8,7 +8,9 @@ E-order Front End
 使用nodejs部署
 
 也可下载代码后，通过以下命令使用（请注意npm与nodejs的版本不能太低）
+
 npm install
+
 npm start
 
 demo
